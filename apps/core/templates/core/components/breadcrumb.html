@@ -1,0 +1,19 @@
+<div class="text-end">
+    <ol class="breadcrumb m-0 py-0">
+        {% for item in paths %}
+        {% if forloop.last %}
+        <li class="breadcrumb-item active">{{ item.title|title }}</li>
+        {% else %}
+        <li class="breadcrumb-item">
+            {% if item.args|length == 1 %}
+            <a href="{% url item.url item.args.0 %}">{{ item.title|title }}</a>
+            {% elif item.args|length == 2 %}
+            <a href="{% url item.url item.args.0 item.args.1 %}">{{ item.title|title }}</a>
+            {% else %}
+            <a href="{% url item.url %}">{{ item.title|title }}</a>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ol>
+</div>

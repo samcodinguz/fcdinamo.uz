@@ -1,0 +1,171 @@
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <div data-table  data-table-rows-per-page="{{ per_page }}" class="card">
+                <div class="card-header border-light justify-content-between">
+                    <div class="d-flex gap-2">
+                        <div class="app-search">
+                            <input data-table-search type="search" class="form-control" placeholder="Qidiruv..." />
+                            <i class="ti ti-search app-search-icon text-muted"></i>
+                        </div>
+                        <button data-table-delete-selected class="btn btn-danger d-none">
+                            Delete
+                        </button>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="me-2 fw-semibold">Filter:</span>
+
+                        <form method="get" class="d-flex gap-2">
+                            <!-- Category -->
+                            <select class="form-select" name="category" onchange="this.form.submit()">
+                                <option value="all">Barchasi</option>
+                                {% for cat in categorys %}
+                                <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
+                                    {{ cat.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            
+                            <!-- Status -->
+                            <select class="form-select" name="status" onchange="this.form.submit()">
+                                <option value="all">Barchasi</option>
+                                <option value="true" {% if status == "true" %}selected{% endif %}>Faol yangiliklar</option>
+                                <option value="false" {% if status == "false" %}selected{% endif %}>Nofaol yangiliklar</option>
+                            </select>
+
+                            <!-- Records Per Page -->
+                            <select class="form-select form-control my-1 my-md-0" name="per_page" onchange="this.form.submit()">
+                                <option value="5" {% if per_page == "5" %}selected{% endif %}>5</option>
+                                <option value="10" {% if per_page == "10" %}selected{% endif %}>10</option>
+                                <option value="15" {% if per_page == "15" %}selected{% endif %}>15</option>
+                                <option value="20" {% if per_page == "20" %}selected{% endif %}>20</option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <div class="d-flex gap-1">
+                        <a href="" class="btn btn-soft-primary btn-icon active">
+                            <i class="ti ti-list-check fs-lg"></i>
+                        </a>
+                        <a href="" class="btn btn-danger ms-1">
+                            <i class="ti ti-plus fs-sm me-2"></i>
+                            Yangilik qo'shish
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+                        <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+                            <tr class="text-uppercase fs-xxs">
+                                <th class="ps-3" style="width: 1%">
+                                    <input data-table-select-all class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" id="select-all-products" value="option" />
+                                </th>
+                                <th style="width: 1%;">Img</th>
+                                <th data-table-sort="name" style="min-width: 300px;">Yangilik nomi</th>
+                                <th data-table-sort data-column="category" class="text-center">Yangilik turi</th>
+                                <th data-table-sort="views" class="text-center">Ko'rishlar</th>
+                                <th data-table-sort data-column="status" class="text-center">Ko'rsatish</th>
+                                <th data-table-sort class="text-center">Yaratilgan vaqti</th>
+                                <th class="text-center" style="width: 1%">Amallar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for new in news_list %}
+                            <tr>
+                                <td class="ps-3">
+                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
+                                </td>
+                                <td>
+                                    <div class="avatar-lg d-flex justify-content-center align-items-center">
+                                        <img src="{{ new.image.url }}" alt="{{ new.title }}" class="img-fluid rounded" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div>
+                                            <h5 class="mb-1">
+                                                <a data-sort="name" href="{% url 'news_detail' new.id %}" target="_blank" class="link-reset">{{ new.title }}</a>
+                                            </h5>
+                                            <p class="text-muted mb-0 fs-xxs">{{ new.category.name }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ new.category.name }}</td>
+                                <td class="text-center">
+                                    <i class="ti ti-eye"></i>
+                                    <span data-sort="views" class="ms-1">({{ new.views_count }})</span>
+                                </td>
+                                <td class="text-center">
+                                    {% if new.is_published %}
+                                    <span class="badge badge-soft-success fs-xxs">
+                                        <i class="ti ti-circle-check"></i>
+                                        <span class="d-none">true</span>
+                                    </span>
+                                    {% else %}
+                                    <span class="badge badge-soft-danger fs-xxs">
+                                        <i class="ti ti-xbox-x"></i>
+                                        <span class="d-none">false</span>
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {{ new.created_at }}
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <a href="{% url 'news_detail' new.id %}" class="btn btn-default btn-icon btn-sm">
+                                            <i class="ti ti-eye fs-lg"></i>
+                                        </a>
+                                        <a href="{% url 'judge_news_edit' new.id %}" class="btn btn-default btn-icon btn-sm">
+                                            <i class="ti ti-edit fs-lg"></i>
+                                        </a>
+                                        <a href="" data-table-delete-row class="btn btn-default btn-icon btn-sm">
+                                            <i class="ti ti-trash fs-lg"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
+                            <li class="page-item {% if not news_list.has_previous %}disabled{% endif %}">
+                                <a class="page-link" href="{% if news_list.has_previous %}?page={{ news_list.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% for page in pagination_range %}
+                            {% if page == '...' %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% elif page == news_list.number %}
+                            <li class="page-item active"><a class="page-link" href="?{% if category %}category={{ category }}&{% endif %}{% if status %}status={{ status }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?{% if category %}category={{ category }}&{% endif %}{% if status %}status={{ status }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            <li class="page-item {% if not news_list.has_next %}disabled{% endif %}">
+                                <a class="page-link" href="{% if news_list.has_next %}?{% if category %}category={{ category }}&{% endif %}{% if status %}status={{ status }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ news_list.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+</div>
+{% endblock content %} {% block js %}
+<!-- Custom table -->
+<script src="{% static 'js/pages/custom-table.js' %}"></script>
+{% endblock js %}

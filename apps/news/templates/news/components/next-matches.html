@@ -1,0 +1,115 @@
+<div class="col-12 col-lg-5 col-xl-4 d-none d-md-block">
+    {% if next_men_match or next_women_match %}
+    <h3 class="text-dark mb-3">Navbatdagi o'yinlar</h3>
+    <div class="card card-top-sticky-4 shadow-none rounded-0 mb-4" style="background: none !important;">
+        <div class="card-header">
+            <ul class="nav nav-underline" data-bs-toggle="tabs">
+                <li class="nav-item">
+                    <a href="#mens" class="nav-link px-2 active" data-bs-toggle="tab">Erkaklar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#womens" class="nav-link px-2" data-bs-toggle="tab">Ayollar</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="mens">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h4 class="mb-0">Navbatdagi o'yin</h4>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center">
+                            <a href="#" class="fw-medium d-inline-flex align-items-center gap-1">
+                                Barcha o'yinlar <i class="ti ti-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% if next_men_match %}
+                    <h3 class="text-center text-dark mt-2 mb-3">{{ next_men_match.match_date|date:"d F" }}</h3>
+                    <div class="row mb-4">
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ next_men_match.home_team.logo.url }}" width="55" alt="{{ next_men_match.home_team.name }}">
+                                </div>
+                                <h5 class="text-dark my-2">
+                                    {{ next_men_match.home_team.name }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center align-items-center">
+                            <div>
+                                <h3 class="text-dark">
+                                    {{ next_men_match.match_date|date:"H : i" }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ next_men_match.away_team.logo.url }}" width="55" alt="{{ next_men_match.home_team.name }}">
+                                </div>
+                                <h5 class="text-dark my-2">
+                                    {{ next_men_match.away_team.name }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="" class="btn btn-primary w-100 mb-4">Chipta sotib olish</a>
+                    {% else %}
+                    <h4 class="text-muted text-center my-3"><i>Mavjud emas</i></h4>
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="womens">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h4 class="mb-0">Navbatdagi o'yin</h4>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center">
+                            <a href="#" class="fw-medium d-inline-flex align-items-center gap-1">
+                                Barcha o'yinlar <i class="ti ti-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% if next_women_match %}
+                    <h3 class="text-center text-dark mt-2 mb-3">{{ next_women_match.match_date|date:"d F" }}</h3>
+                    <div class="row mb-4">
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ next_women_match.home_team.logo.url }}" width="55" alt="{{ next_women_match.home_team.name }}">
+                                </div>
+                                <h5 class="text-dark my-2">
+                                    {{ next_women_match.home_team.name }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center align-items-center">
+                            <div>
+                                <h3 class="text-dark">
+                                    {{ next_women_match.match_date|date:"H : i" }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ next_women_match.away_team.logo.url }}" width="55" alt="{{ next_women_match.home_team.name }}">
+                                </div>
+                                <h5 class="text-dark my-2">
+                                    {{ next_women_match.away_team.name }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="" class="btn btn-primary w-100 mb-4">Chipta sotib olish</a>
+                    {% else %}
+                    <h4 class="text-muted text-center my-3"><i>Mavjud emas</i></h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-layout="topnav" data-topbar-color="dark" data-menu-color="light" data-skin="mono">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}FC Dinamo — {{ page_title }}{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Paces is a modern, responsive admin dashboard available on ThemeForest. Ideal for building CRM, CMS, project management tools, and custom web applications with a clean UI, flexible layouts, and rich features." />
+    <meta name="keywords" content="Paces, admin dashboard, ThemeForest, Bootstrap 5 admin, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template" />
+    <meta name="author" content="Coderthemes" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+    <!-- Theme Config Js -->
+    <script src="{% static 'js/config.js' %}"></script>
+    <!-- Vendor css -->
+    <link href="{% static 'css/vendors.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="{% static 'css/app.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- My css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block css %}{% endblock css %}
+</head>
+<body>
+    {% include 'core/components/messages.html' %}
+    <!-- Begin page -->
+    <div class="wrapper">
+        {% include 'judge/components/topbar.html' %}
+        {% include 'judge/components/navbar.html' %}
+        <!-- Start Main Content -->
+        <div class="content-page">
+            <div class="container-fluid">
+                <div class="page-title-head d-flex align-items-center justify-content-end">
+                    {% include 'core/components/breadcrumb.html' %}
+                </div>
+            </div>
+            {% block content %}
+            <div class="container">
+
+            </div>
+            {% endblock content %}
+            {% include 'judge/components/footer.html' %}
+        </div>
+        <!-- End of Main Content -->
+    </div>
+    <!-- Vendor js -->
+    <script src="{% static 'js/vendors.min.js' %}"></script>
+    <!-- App js -->
+    <script src="{% static 'js/app.js' %}"></script>
+    {% block js %}{% endblock js %}
+</body>
+</html>

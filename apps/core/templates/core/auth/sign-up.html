@@ -1,0 +1,78 @@
+{% extends "core/auth/sign-in.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block auth %}
+<div class="card p-4">
+    <div class="auth-brand text-center mb-4">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'images/favicon.png' %}" width="55" height="55" alt="logo" />
+        </a>
+        <p class="text-muted w-lg-75 mt-3 mx-auto">Ro'yxatdan o'tish uchun quyidagi ma'lumotlarni to'ldiring.</p>
+    </div>
+    <div class="row text-muted g-2">
+        <div class="col-12">
+            <a href="#!" class="btn btn-default w-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="me-1" width="13.68px" height="14px" viewBox="0 0 256 262">
+                    <path fill="#4285f4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" />
+                    <path fill="#34a853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" />
+                    <path fill="#fbbc05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z" />
+                    <path fill="#eb4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" />
+                </svg>
+                Google orqali ro'yxatdan o'tish
+            </a>
+        </div>
+    </div>
+    <p class="text-center text-muted my-3 auth-line">
+        <span> Email orqali davom etish </span>
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="userName" class="form-label">
+                Foydalanuvchi nomi
+                <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="userName" name="username" placeholder="username" required />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="userEmail" class="form-label">
+                Email manzil
+                <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input type="email" class="form-control" id="userEmail" name="email" placeholder="you@example.com" required />
+            </div>
+        </div>
+
+        <div class="mb-3" data-password="bar">
+            <label for="userPassword" class="form-label">
+                Parol
+                <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="userPassword" name="password" placeholder="••••••••" required />
+            </div>
+            <div class="password-bar my-2"></div>
+            <p class="text-muted fs-xs mb-0">Kamida 8 ta belgi, harflar, raqamlar va belgilar ishlating.</p>
+        </div>
+
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input form-check-input-light fs-14" type="checkbox" id="termAndPolicy" name="rememberme" checked />
+                <label class="form-check-label" for="termAndPolicy">Foydalanish shartlari va maxfiylik siyosatiga roziman</label>
+            </div>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary fw-semibold py-2">Ro'yxatdan o'tish</button>
+        </div>
+    </form>
+
+    <p class="text-muted text-center mt-4 mb-0">
+        Akkauntingiz bormi?
+        <a href="{% url 'sign-in' %}" class="text-decoration-underline link-offset-3 fw-semibold">Kirish</a>
+    </p>
+</div>
+{% endblock auth %} {% block js %} {% endblock js %}

@@ -1,0 +1,56 @@
+
+<div class="container">
+    <div class="card rounded-0 border-0 shadow-none" style="background: none !important;">
+        <div class="card-header border-0 ps-0 ps-md-3">
+            {% include "matches/components/filter.html" %}
+        </div>
+        <div class="table-responsive mb-4">
+            <table class="table table-custom align-middle mb-0">
+                <tbody>
+                    {% if grouped_matches.items %}
+                    {% for month, matches in grouped_matches.items %}
+                    <tr class="bg-primary-subtle">
+                        <th colspan="5">{{ month }}</th>
+                    </tr>
+                    {% for match in matches %}
+                    <tr>
+                        <td style="min-width: 170px;">{{ match.season.league.name }}</td>
+                        <td style="min-width: 200px;">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <h4 class="mb-0 me-2 text-dark">{{ match.home_team.name }}</h4>
+                                <img src="{{ match.home_team.logo.url }}" width="35" alt="{{ match.home_team.name }}">
+                            </div>
+                        </td>
+                        <td style="min-width: 80px;">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <h2 class="mb-0">
+                                    {% if match.is_finished %}
+                                    <span class="badge text-bg-dark me-1">{{ match.home_goals }}</span><span class="badge text-bg-dark">{{ match.away_goals }}</span>
+                                    {% else %}
+                                    <span class="badge text-bg-light">{{ match.match_date|date:"H:i" }}</span>
+                                    {% endif %}
+                                </h2>
+                            </div>
+                        </td>
+                        <td style="min-width: 200px;">
+                            <div class="d-flex align-items-center justify-content-start">
+                                <img src="{{ match.away_team.logo.url }}" width="35" alt="{{ match.away_team.name }}">
+                                <h4 class="mb-0 ms-2 text-dark">{{ match.away_team.name }}</h4>
+                            </div>
+                        </td>
+                        <td class="text-end" style="min-width: 120px;">
+                            {{ match.day_label }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>{{ page_title }} topilmadi.</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

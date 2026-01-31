@@ -1,0 +1,80 @@
+{% load static %}
+<header class="app-topbar">
+    <div class="container-fluid topbar-menu">
+        <div class="d-flex align-items-center gap-2">
+            <!-- Topbar Brand Logo -->
+            <div class="logo-topbar d-none d-lg-inline">
+                <a href="{% url 'judge' %}">
+                    <span>
+                        <img src="{% static 'images/logotip.png' %}" height="45" alt="logo" />
+                    </span>
+                </a>
+            </div>
+
+            <!-- Sidebar Menu Toggle Button -->
+            <button class="sidenav-toggle-button btn btn-primary btn-icon">
+                <i class="ti ti-menu-4"></i>
+            </button>
+
+            <!-- Horizontal Menu Toggle Button -->
+            <button class="topnav-toggle-button px-2" data-bs-toggle="collapse" data-bs-target="#topnav-menu">
+                <i class="ti ti-menu-4"></i>
+            </button>
+
+            <div id="search-box-rounded" class="app-search d-none d-xl-flex">
+                <input type="search" class="form-control rounded-pill topbar-search" name="search" placeholder="Qidiruv..." />
+                <i class="ti ti-search app-search-icon text-muted"></i>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <div id="theme-dropdown" class="topbar-item">
+                <div class="dropdown">
+                    <button class="topbar-link" data-bs-toggle="dropdown" type="button" aria-haspopup="false"
+                        aria-expanded="false">
+                        <i class="ti ti-sun topbar-link-icon d-none" id="theme-icon-light"></i>
+                        <i class="ti ti-moon topbar-link-icon d-none" id="theme-icon-dark"></i>
+                        <i class="ti ti-sun-moon topbar-link-icon d-none" id="theme-icon-system"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" data-thememode="dropdown">
+                        <label class="dropdown-item cursor-pointer">
+                            <input class="form-check-input" type="radio" name="data-bs-theme" value="light"
+                                style="display: none" />
+                            <i class="ti ti-sun align-middle me-1 fs-16"></i>
+                            <span class="align-middle">Light</span>
+                        </label>
+                        <label class="dropdown-item cursor-pointer">
+                            <input class="form-check-input" type="radio" name="data-bs-theme" value="dark"
+                                style="display: none" />
+                            <i class="ti ti-moon align-middle me-1 fs-16"></i>
+                            <span class="align-middle">Dark</span>
+                        </label>
+                        <label class="dropdown-item cursor-pointer">
+                            <input class="form-check-input" type="radio" name="data-bs-theme" value="system"
+                                style="display: none" />
+                            <i class="ti ti-sun-moon align-middle me-1 fs-16"></i>
+                            <span class="align-middle">System</span>
+                        </label>
+                    </div>
+                    <!-- end dropdown-menu-->
+                </div>
+                <!-- end dropdown-->
+            </div>
+
+            <div id="fullscreen-toggler" class="topbar-item d-none d-md-flex">
+                <button class="topbar-link" type="button" data-toggle="fullscreen">
+                    <i class="ti ti-maximize topbar-link-icon"></i>
+                    <i class="ti ti-minimize topbar-link-icon d-none"></i>
+                </button>
+            </div>
+
+            <div id="monochrome-toggler" class="topbar-item d-none d-xl-flex">
+                <button id="monochrome-mode" class="topbar-link" type="button" data-toggle="monochrome">
+                    <i class="ti ti-palette topbar-link-icon"></i>
+                </button>
+            </div>
+
+            {% include 'core/components/user-dropdown.html' %}
+        </div>
+    </div>
+</header>
