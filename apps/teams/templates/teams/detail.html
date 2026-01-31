@@ -1,0 +1,88 @@
+{% extends "core/index.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="card card-top-sticky bg-transparent shadow-none border-0" style="background: none !important;">
+                                <div class="card-body">
+                                    <img src="{{ detail.image.url }}" alt="{{ detail.name }}" class="img-fluid w-100 px-2 pt-2">
+                                </div>
+                                <div class="card-header d-flex flex-column">
+                                    <h3 class="text-dark mb-0">{{ detail.name }}</h3>
+                                    {% if detail.number %}
+                                        <h1 class="player-number-dark mt-3 me-3">{{ detail.number }}</h1>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="text-dark">Ma'lumot</h3>
+                                    <small>Tug'ilgan sana</small>
+                                    <h4 class="border-bottom">{{ detail.date_of_birth|date:'d-m-Y' }}</h4>
+                                    <small>Manzil</small>
+                                    <h4 class="border-bottom">{{ detail.location }}</h4>
+                                    <small>Lavozimi</small>
+                                    <h4 class="border-bottom">{{ detail.position.title }}</h4>
+                                    {% if detail.phone %}
+                                    <small>Telifon</small>
+                                    <h4 class="border-bottom">{{ detail.phone }}</h4>
+                                    {% endif %}
+                                    {% if detail.email %}
+                                    <small>Email pochta</small>
+                                    <h4 class="border-bottom">{{ detail.email }}</h4>
+                                    {% endif %}
+                                    {% if detail.joined_date %}
+                                    <small>Klubga kelgan</small>
+                                    <h4 class="border-bottom">{{ detail.joined_date|date:'d-m-Y' }}</h4>
+                                    {% endif %}
+                                </div>
+                                {% if detail.instagram %}
+                                <div class="card-body">
+                                    <h3 class="text-dark">Ijtimoiy tarmoqlar</h3>
+                                    <small>Instagram</small>
+                                    <h4 class="border-bottom">{{ detail.instagram }}</h4>
+                                </div>
+                                {% endif %}
+                                <!-- end card-body-->
+                            </div>
+                            <!-- end card-->
+                        </div>
+                        <!-- end col-->
+
+                        <div class="col-xl-8 px-0 px-xl-2">
+                            <div class="p-4">
+                                <div class="mt-3 mb-4 px-0">
+                                    <h3 class="text-dark">To'liq biografiya</h3>
+                                    <p class="fs-4">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident sequi quis impedit beatae ducimus aliquam aspernatur similique. Quod optio ea ex sint, placeat reprehenderit harum! A cupiditate dolorem nihil qui. Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim temporibus, velit molestias itaque quas quod error in natus, porro eaque magnam, consequuntur nemo beatae doloremque ea repellat. Porro, amet ullam.
+                                    </p>
+                                    <p class="fs-4">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident sequi quis impedit beatae ducimus aliquam aspernatur similique. Quod optio ea ex sint, placeat reprehenderit harum! A cupiditate dolorem nihil qui.
+                                    </p>
+                                    <p class="fs-4">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident sequi quis impedit beatae ducimus aliquam aspernatur similique. Quod optio ea ex sint, placeat reprehenderit harum! A cupiditate dolorem nihil qui.
+                                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa excepturi, soluta fugit ratione totam consequuntur architecto quis necessitatibus praesentium deleniti, cum inventore? Ipsa fuga, aliquid aspernatur cupiditate dolore sequi natus.
+                                    </p>
+                                    <p class="fs-4">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident sequi quis impedit beatae ducimus aliquam aspernatur similique. Quod optio ea ex sint, placeat reprehenderit harum! A cupiditate dolorem nihil qui.
+                                    </p>
+                                    <p class="fs-4">
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis dolor nihil omnis aspernatur similique nemo, eligendi eum consectetur nostrum fugit voluptatum neque error tempore quia reprehenderit fuga magnam sint? Temporibus!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col-->
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end card-body-->
+            </div>
+            <!-- end card-->
+        </div>
+        <!-- end col-->
+    </div>
+</div>
+{% endblock content %} {% block js %} {% endblock js %}

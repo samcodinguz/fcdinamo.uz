@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from apps.core.utils import get_base_context
 from apps.teams.models import Management, ManagementPosition
 from apps.teams.models import Coach, CoachPosition
@@ -21,6 +21,7 @@ def managements(request):
         'groups': grouped,
         'page_title': 'Raxbariyat',
         'paths': paths,
+        'url': 'management'
     }
     context.update(get_base_context(request))
     return render(request, 'teams/managements.html', context)
@@ -41,6 +42,7 @@ def coaches(request):
         'groups': grouped,
         'page_title': 'Murabbiylar',
         'paths': paths,
+        'url': 'coach' 
     }
     context.update(get_base_context(request))
     return render(request, 'teams/coaches.html', context)
@@ -58,6 +60,7 @@ def mens(request):
         'groups': group_players_by_position(menplayers, team_type='men'),
         'page_title': 'Erkaklar jamoasi',
         'paths': paths,
+        'url': 'men'
     }
     context.update(get_base_context(request))
     return render(request, 'teams/mens.html', context)
@@ -75,7 +78,73 @@ def womens(request):
         'groups': group_players_by_position(womenplayers, team_type='women'),
         'page_title': 'Ayollar jamoasi',
         'paths': paths,
+        'url': 'women'
     }
     context.update(get_base_context(request))
     return render(request, 'teams/womens.html', context)
 
+def management_detail(request, id):
+
+    mg_detail = get_object_or_404(Management, id=id)
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'managements', 'url': 'managements', 'args': []},
+        {'title': id, 'url': 'management_detail', 'args': [id]},
+    ]
+    context = {
+        'detail': mg_detail,
+        'page_title': mg_detail.name,
+        'paths': paths
+    }
+    context.update(get_base_context(request))
+    return render(request, 'teams/detail.html', context)
+
+def coach_detail(request, id):
+
+    co_detail = get_object_or_404(Coach, id=id)
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'coaches', 'url': 'coaches', 'args': []},
+        {'title': id, 'url': 'coach_detail', 'args': [id]},
+    ]
+    context = {
+        'detail': co_detail,
+        'page_title': co_detail.name,
+        'paths': paths
+    }
+    context.update(get_base_context(request))
+    return render(request, 'teams/detail.html', context)
+
+def men_detail(request, id):
+
+    mn_detail = get_object_or_404(MenPlayer, id=id)
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'players', 'url': 'mens', 'args': []},
+        {'title': 'mens', 'url': 'mens', 'args': []},
+        {'title': id, 'url': 'men_detail', 'args': [id]},
+    ]
+    context = {
+        'detail': mn_detail,
+        'page_title': mn_detail.name,
+        'paths': paths
+    }
+    context.update(get_base_context(request))
+    return render(request, 'teams/detail.html', context)
+
+def women_detail(request, id):
+
+    wn_detail = get_object_or_404(WomenPlayer, id=id)
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'players', 'url': 'mens', 'args': []},
+        {'title': 'mens', 'url': 'mens', 'args': []},
+        {'title': id, 'url': 'women_detail', 'args': [id]},
+    ]
+    context = {
+        'detail': wn_detail,
+        'page_title': wn_detail.name,
+        'paths': paths
+    }
+    context.update(get_base_context(request))
+    return render(request, 'teams/detail.html', context)

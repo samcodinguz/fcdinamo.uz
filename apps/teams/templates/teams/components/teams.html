@@ -6,10 +6,26 @@
                 <div class="row">
                 {% for item in players %}
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3">
-                        <a href="">
+                        {% if url == 'management' %}
+                        <a href="{% url 'management_detail' item.id %}">
+                        {% elif url == 'coach' %}
+                        <a href="{% url 'coach_detail' item.id %}">
+                        {% elif url == 'men' %}
+                        {% if item.number %}
+                        <a href="{% url 'men_detail' item.id %}">
+                        {% else %}
+                        <a href="{% url 'coach_detail' item.id %}">
+                        {% endif %}
+                        {% else %}
+                        {% if item.number %}
+                        <a href="{% url 'women_detail' item.id %}">
+                        {% else %}
+                        <a href="{% url 'coach_detail' item.id %}">
+                        {% endif %}
+                        {% endif %}
                             <div class="card border-light h-100 rounded-0">
                                 <div class="card-body text-center player-card p-0">
-                                    <div class="{% if item.number %}player-card-bg{% else %}bg-light{% endif %} player-card-bg position-relative mb-3">
+                                    <div class="{% if item.number %}player-card-bg{% else %}bg-light{% endif %} position-relative mb-3">
                                         <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid w-100">
                                     </div>
                                     <h3 class="text-dark player-title">{{ item.name }}</h3>

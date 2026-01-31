@@ -24,5 +24,4 @@ def group_players_by_position(players, team_type='men'):
     coaches = Coach.objects.filter(team_type=team_type).order_by('order')
     if coaches.exists():
         grouped["Murabbiylar"] = coaches
-
     return grouped
