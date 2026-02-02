@@ -23,7 +23,7 @@ class Table {
       (this.itemNotFoundMessage = "Nothing found."),
       (this.deleteRowMessage = "Haqiqatan ham o'chirishni xohlaysizmi?"),
       (this.deleteMultipleRowsMessage =
-        "Are you sure you want to delete these rows?"));
+        "Haqiqatan ham o'chirishni xohlaysizmi?"));
   }
   get totalPages() {
     return Math.ceil(this.filteredRows.length / this.rowsPerPage) || 1;
@@ -377,56 +377,49 @@ class Table {
     )),
       this.deleteSelectedSelector &&
         this.deleteSelectedSelector.addEventListener("click", (e) => {
-          e.preventDefault();
+          e.preventDefault(); // vaqtincha to‘xtatamiz (modal uchun)
+
           let r = this.rows.filter(
             (e) => e.querySelector('input[type="checkbox"]').checked,
           );
+
           if (0 < r.length) {
-            let { modal: t, confirmButton: e } = this.alert(
-                1 < r.length
-                  ? this.deleteMultipleRowsMessage
-                  : this.deleteRowMessage,
-              ),
-              a = this.rows;
-            (t.show(),
-              e.addEventListener("click", () => {
-                r.forEach((e) => e.remove());
-                var e = a.filter((e) => !r.includes(e));
-                ((this.rows = [...e]),
-                  (this.filteredRows = [...e]),
-                  this.currentPage > this.totalPages &&
-                    (this.currentPage = this.totalPages),
-                  this.update(),
-                  t.hide(),
-                  this.deleteSelectedSelector.classList.add("d-none"),
-                  (this.checkAllCheckBox.checked = !1));
-              }));
+            let { modal: t, confirmButton: btn } = this.alert(
+              1 < r.length
+                ? this.deleteMultipleRowsMessage
+                : this.deleteRowMessage,
+            );
+
+            t.show();
+            btn.addEventListener("click", () => {
+              this.deleteSelectedSelector.closest("form").submit();
+            });
           }
         }));
   }
+
   deleteRow() {
-    var e = this.table.querySelectorAll(this.parentInstance.deleteRowSelector);
-    e &&
-      e.forEach((s) => {
-        s.addEventListener("click", (e) => {
-          e.preventDefault();
-          let { modal: a, confirmButton: t } = this.alert(),
-            r = this.rows;
-          (a.show(),
-            t.addEventListener("click", () => {
-              let t = s.closest("tr");
-              t.remove();
-              var e = r.filter((e) => e !== t);
-              ((this.rows = [...e]),
-                (this.filteredRows = [...e]),
-                this.currentPage > this.totalPages &&
-                  (this.currentPage = this.totalPages),
-                this.update(),
-                a.hide());
-            }));
-        });
+  let buttons = this.table.querySelectorAll(".single-delete-btn");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      let url = btn.getAttribute("href");
+
+      let { modal, confirmButton } = this.alert(
+        "Haqiqatan ham o‘chirmoqchimisiz?"
+      );
+
+      modal.show();
+
+      confirmButton.addEventListener("click", () => {
+        window.location.href = url;   // <<< ASOSIY JOY
       });
-  }
+    });
+  });
+}
+
   alert(e) {
     var t,
       e = `
@@ -434,15 +427,15 @@ class Table {
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Confirm Deletion</h4>
+                        <h4 class="modal-title">O'chirishni tasdiqlash</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">   
                         <p class="mb-0">${e ?? this.deleteRowMessage}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                          <button type="button" class="btn btn-danger" id="confirm-delete">Delete</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
+                          <button type="button" class="btn btn-danger" id="confirm-delete">Xa</button>
                     </div>
                 </div>
             </div>

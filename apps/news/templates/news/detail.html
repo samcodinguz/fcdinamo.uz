@@ -27,13 +27,13 @@
                         <div class="col-5 col-md-6">
                             <div class="d-flex justify-content-end">
                                 <div class="btn-list">
-                                    <a href="#" class="btn btn-icon btn-outline-twitter rounded-pill">
+                                    <a href="{{ news_detail.telegram_url }}" target="_blank" class="btn btn-icon btn-outline-twitter rounded-pill">
                                         <i class="ti ti-brand-telegram fs-2"></i>
                                     </a>
-                                    <a href="#" class="btn btn-icon btn-outline-facebook rounded-pill">
+                                    <a href="{{ news_detail.facebook_url }}" target="_blank" class="btn btn-icon btn-outline-facebook rounded-pill">
                                         <i class="ti ti-brand-facebook fs-2"></i>
                                     </a>
-                                    <a href="#" class="btn btn-icon btn-outline-instagram rounded-pill">
+                                    <a href="{{ news_detail.instagram_url }}" target="_blank" class="btn btn-icon btn-outline-instagram rounded-pill">
                                         <i class="ti ti-brand-instagram fs-2"></i>
                                     </a>
                                 </div>
@@ -44,16 +44,15 @@
                 <div class="card-body px-2 px-lg-5 mx-lg-5 mb-2 border-0 border-bottom">
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="d-none d-md-block">{{ news_detail.short_description }}</h2>
-                            <h3 class="d-block d-md-none">{{ news_detail.short_description }}</h3>
-                            <p class="fs-4 d-none d-md-block">{{ news_detail.content|safe }}</p>
-                            <p class="fs-4 d-block d-md-none">{{ news_detail.content|safe }}</p>
+                            <div class="content">
+                                {{ news_detail.content|safe }}
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body px-2 px-lg-5 mx-lg-5 border-0">
                     <div class="row">
-                        <div class="col-8 col-sm-9 col-xl-8">
+                        <div class="col-12">
                             <div class="tags-list">
                                 {% for tag in news_detail.tags.all %}
                                 <a href="{% url 'news_all' %}?tag={{ tag.name }}" class="text-reset">
@@ -62,12 +61,6 @@
                                     </span>
                                 </a>
                                 {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-4 col-sm-3 col-xl-4">
-                            <div class="d-flex justify-content-end align-items-center">
-                                    <i class="ti ti-eye fs-2 me-2"></i>
-                                    {{ news_detail.views_count }}
                             </div>
                         </div>
                     </div>
@@ -134,4 +127,28 @@
         {% endif %}
     </div>
 </div>
-{% endblock content %} {% block js %} {% endblock js %}
+{% endblock content %} {% block js %} 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const content = document.querySelector(".content");
+
+    if (!content) return;
+
+    const iframes = content.querySelectorAll("iframe");
+
+    iframes.forEach((iframe) => {
+        if (!iframe.closest(".ratio")) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "ratio ratio-16x9 overflow-hidden my-3 ";
+
+        iframe.parentNode.insertBefore(wrapper, iframe);
+        wrapper.appendChild(iframe);
+        iframe.removeAttribute("width");
+        iframe.removeAttribute("height");
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        }
+    });
+    });
+</script>
+{% endblock js %}

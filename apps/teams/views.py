@@ -118,6 +118,10 @@ def coach_detail(request, id):
 def men_detail(request, id):
 
     mn_detail = get_object_or_404(MenPlayer, id=id)
+
+    grouped = OrderedDict()
+    menplayers = MenPlayer.objects.filter(position=mn_detail.position).exclude(pk=id).select_related('position').order_by('?')[:4]
+    grouped[mn_detail.position] = menplayers
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
         {'title': 'players', 'url': 'mens', 'args': []},
@@ -125,9 +129,11 @@ def men_detail(request, id):
         {'title': id, 'url': 'men_detail', 'args': [id]},
     ]
     context = {
+        'groups': grouped,
         'detail': mn_detail,
         'page_title': mn_detail.name,
-        'paths': paths
+        'paths': paths,
+        'url': 'men'
     }
     context.update(get_base_context(request))
     return render(request, 'teams/detail.html', context)
@@ -135,16 +141,23 @@ def men_detail(request, id):
 def women_detail(request, id):
 
     wn_detail = get_object_or_404(WomenPlayer, id=id)
+
+    grouped = OrderedDict()
+    womenplayers = WomenPlayer.objects.filter(position=wn_detail.position).exclude(pk=id).select_related('position').order_by('?')[:4]
+    grouped[wn_detail.position] = womenplayers
+
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'players', 'url': 'mens', 'args': []},
-        {'title': 'mens', 'url': 'mens', 'args': []},
+        {'title': 'players', 'url': 'womens', 'args': []},
+        {'title': 'mens', 'url': 'womens', 'args': []},
         {'title': id, 'url': 'women_detail', 'args': [id]},
     ]
     context = {
+        'groups': grouped,
         'detail': wn_detail,
         'page_title': wn_detail.name,
-        'paths': paths
+        'paths': paths,
+        'url': 'women'
     }
     context.update(get_base_context(request))
     return render(request, 'teams/detail.html', context)

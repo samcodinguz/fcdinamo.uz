@@ -143,7 +143,10 @@ def news_club(request):
 
 def news_detail(request, news_detail_id):
 
-    news_detail = get_object_or_404(News.objects.select_related('category', 'author').prefetch_related('tags'), pk=news_detail_id, is_published=True)
+    if request.user.is_superuser:
+        news_detail = get_object_or_404(News.objects.select_related('category', 'author').prefetch_related('tags'), pk=news_detail_id)
+    else:
+        news_detail = get_object_or_404(News.objects.select_related('category', 'author').prefetch_related('tags'), pk=news_detail_id, is_published=True)
     News.objects.filter(pk=news_detail.pk).update(
         views_count=F('views_count') + 1
     )

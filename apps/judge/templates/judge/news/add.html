@@ -1,5 +1,192 @@
-{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} 
+<!-- Dropzone Plugin CSS -->
+<link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet" type="text/css" />
+<!-- Summernote Plugin CSS -->
+<link href="{% static 'plugins/summernote/summernote-bs5.min.css' %}" rel="stylesheet" />
+{% endblock css %}
 {% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xxl-12">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-xxl-8">
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Yangilik qo'shish</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="newsName" class="form-label">Yangilik sarlavhasi <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="newsName" placeholder="Yangilik sarlavhasini kiriting" name="title" required />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Yangilik haqida <span class="text-muted">(Batafsil)</span></label>
+                                            <textarea name="content" class="summernote"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
 
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Yangilik rasmi</h4>
+                                <p class="text-muted mb-0">Saytda yangiliklar chiroyli dezayn berishni hoxlasangiz 810x456 o'lchamdagi tasvir yuklang.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="newsImage" class="form-label">Rasm tanlash</label>
+                                        <input type="file" class="form-control" name="file" id="newsImage">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
+                    </div>
+                    <!-- end col-->
+
+                    <div class="col-xxl-4">
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Boshqa parametirlar</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="basePrice" class="form-label">Toifasi <span class="text-danger">*</span></label>
+                                    <div class="app-search">
+                                        <select class="form-select form-control my-1 my-md-0" id="subCategory" name="category">
+                                            {% for cat in categories %}
+                                                <option value="{{ cat.id }}">
+                                                    {{ cat.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <i class="ti ti-list-check app-search-icon text-muted"></i>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="discount" class="form-label">Authori</label>
+                                    <div class="app-search">
+                                        <select class="form-select form-control my-1 my-md-0" id="discount" name="author">
+                                            {% for user in users %}
+                                                <option value="{{ user.id }}"
+                                                    {% if user.id == request.user.id %}selected{% endif %}>
+                                                    {{ user.username }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <i class="ti ti-user app-search-icon text-muted"></i>
+                                    </div>
+                                </div>
+
+                                <div class="mb-0">
+                                    <label for="discount" class="form-label">Teglar</label>
+                                    <select class="form-control" id="choices-multiple-remove-button" data-choices data-choices-removeItem name="tags" multiple>
+                                        {% for tag in tags %}
+                                            <option value="{{ tag.id }}">
+                                                {{ tag.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Ijtimoiy tarmoqlar</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="brand" class="form-label">Telegram</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="ti ti-brand-telegram text-muted fs-3"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-fb" placeholder="Telegram URL" name="telegram_url">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="brand" class="form-label">Facebook</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="ti ti-brand-facebook text-muted fs-3"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-fb" placeholder="Facebook URL" name="facebook_url">
+                                    </div>
+                                </div>
+                                <div class="mb-0">
+                                    <label for="brand" class="form-label">Instagram</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="ti ti-brand-instagram text-muted fs-3"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-fb" placeholder="Instagram URL" name="instagram_url">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Maxfiylik</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="brand" class="form-label">Yangilik ko'rsatilsinmi</label>
+                                    <div class="app-search">
+                                        <select class="form-select form-control my-1 my-md-0" id="discount" name="is_published">
+                                            <option value="true" selected>
+                                                Ha, ko'rsatilsin
+                                            </option>
+
+                                            <option value="false">
+                                                Yo'q, yashirilsin
+                                            </option>
+                                        </select>
+                                        <i class="ti ti-lock app-search-icon text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row-->
+                <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                    <a href="{% url 'judge_news' %}" class="btn btn-danger fw-semibold"> Saqlamaslik </a>
+                    <button type="submit" class="btn btn-success"> Saqlash </button>
+                </div>
+            </form>
+        </div>
+        <!-- end col-->
+    </div>
+    <!-- end row-->
+</div>
 {% endblock content %} {% block js %}
+<!-- Choices Demo Js-->
+<script src="{% static 'js/pages/form-choice.js' %}"></script>
+<!-- Jquery for Summernote-->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Summernote Plugin Js -->
+<script src="{% static 'plugins/summernote/summernote-bs5.min.js' %}"></script>
+<!-- Summernote Demo Js -->
+<script src="{% static 'js/pages/form-summernote.js' %}"></script>
 {% endblock js %}
