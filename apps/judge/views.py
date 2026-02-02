@@ -5,9 +5,14 @@ from apps.core.utils import paginate_queryset
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.users.models import CustomUser
+from django.core.exceptions import PermissionDenied
 import os
 
+@login_required
 def judge(request):
+
+    if not request.user.is_superuser:
+        raise PermissionDenied
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
@@ -20,12 +25,19 @@ def judge(request):
     context.update(get_base_context(request))
     return render(request, 'judge/judge.html', context)
 
-
+@login_required
 def judge_news(request):
+
+    if not request.user.is_superuser:
+        raise PermissionDenied
 
     if request.method == "POST":
         ids = request.POST.getlist("selected_ids")
-        News.objects.filter(id__in=ids).delete()
+        news_list = News.objects.filter(id__in=ids)
+        for news in news_list:
+            if news.image:
+                news.image.delete(save=False)
+        news_list.delete()
         messages.success(request, f"{len(ids)} ta yangilik o'chirildi")
         return redirect('judge_news')
 
@@ -66,13 +78,21 @@ def judge_news(request):
     context.update(get_base_context(request))
     return render(request, 'judge/news/news.html', context)
 
+@login_required
 def judge_news_delete(request, news_id):
-    News.objects.filter(id=news_id).delete()
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    news = get_object_or_404(News, id=news_id)
+    if news.image:
+        news.image.delete(save=False)
+    news.delete()
     messages.success(request, "Yangilik muvaffaqiyatli o'chirildi")
     return redirect('judge_news')
 
 @login_required
 def judge_news_edit(request, news_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
 
     news = get_object_or_404(News, id=news_id)
 
@@ -126,6 +146,8 @@ def judge_news_edit(request, news_id):
 
 @login_required
 def judge_news_add(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
 
     if request.method == "POST":
 
@@ -141,7 +163,7 @@ def judge_news_add(request):
         tags = request.POST.getlist('tags')
   
         if not title or not category_id:
-            messages.success(request, "Majburiy maydonlar to'ldirilmagan")
+            messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_news_add')
         
         category = NewsCategory.objects.get(id=category_id)
@@ -184,3 +206,80 @@ def judge_news_add(request):
     }
     context.update(get_base_context(request))
     return render(request, 'judge/news/add.html', context)
+
+
+@login_required
+def judge_news_tags(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    if request.method == "POST":
+        ids = request.POST.getlist("selected_ids")
+        tags_list = NewsTag.objects.filter(id__in=ids)
+        tags_list.delete()
+        messages.success(request, f"{len(ids)} ta teg o'chirildi")
+        return redirect('judge_news_tags')
+
+    per_page = request.GET.get('per_page', 10)
+
+    tags_list = NewsTag.objects.all().order_by('-id')
+    tags_list, pagination_range = paginate_queryset(tags_list, request, per_page=per_page)
+
+    paths = [
+        {'title': 'judge', 'url': 'judge', 'args': []},
+        {'title': 'news', 'url': 'judge_news', 'args': []},
+        {'title': 'tags', 'url': 'judge_news_tags', 'args': []},
+    ]
+
+    context = {
+        'per_page': str(per_page),
+        'pagination_range': pagination_range,
+        "tags_list": tags_list,
+        'paths': paths,
+        'page_title': 'Teglarni sozlash'
+    }
+    context.update(get_base_context(request))
+    return render(request, 'judge/news/tags.html', context)
+
+@login_required
+def judge_news_tags_delete(request, tags_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    tags = get_object_or_404(NewsTag, id=tags_id)
+    tags.delete()
+    messages.success(request, "Teg muvaffaqiyatli o'chirildi")
+    return redirect('judge_news_tags')
+
+@login_required
+def judge_news_tags_edit(request, tags_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    tags = get_object_or_404(NewsTag, id=tags_id)
+
+    if request.method == "POST":
+
+        tags.name = request.POST.get('tag_name')
+        tags.save()
+        messages.success(request, "Teg muvaffaqiyatli saqlandi")
+
+    return redirect('judge_news_tags') 
+    
+@login_required
+def judge_news_tags_add(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    if request.method == "POST":
+
+        tag_name = request.POST.get('tag_name')
+        
+        if not tag_name:
+            messages.error(request, "Teg nomi kiritilmadi")
+            return redirect('judge_news_tags')
+
+        NewsTag.objects.create(name=tag_name)
+
+        messages.success(request, "Teg muvaffaqiyatli yaratildi")
+    
+    return redirect('judge_news_tags')

@@ -4,10 +4,15 @@
         <nav class="container-fluid">
             <div class="collapse navbar-collapse" id="topnav-menu">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'judge_news' %}" role="button">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-news" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="menu-text">Yangiliklar</span>
+                            <div class="menu-arrow"></div>
                         </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-news">
+                            <a href="{% url 'judge_news' %}" class="dropdown-item"><span>Yangiliklarni sozlash</span></a>
+                            <a href="{% url 'judge_news_tags' %}" class="dropdown-item"><span>Teglarni sozlash</span></a>
+                        </div>
                     </li>
                 </ul>
             </div>
