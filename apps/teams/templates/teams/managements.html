@@ -1,4 +1,31 @@
 {% extends "core/index.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
 {% block content %}
-{% include "teams/components/teams.html" %}
+<div class="container">
+    <div class="row justify-content-center">
+        {% for group_name, players in groups.items %}
+            <div class="col-12 col-lg-10">
+                <h3 class="fw-bold my-4">{{ group_name }}</h3>
+                <div class="row">
+                {% for item in players %}
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3">
+                        <a href="{% url 'management_detail' item.id %}">
+                            <div class="card border-light h-100 rounded-0">
+                                <div class="card-body text-center player-card p-0">
+                                    <div class="bg-light mb-3">
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid w-100">
+                                    </div>
+                                    <h3 class="text-dark player-title">{{ item.name }}</h3>
+                                    <span class="text-muted">{{ item.position.title }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% empty %}
+                    <p class="border-bottom">{{ group_name }} topilmadi</p>
+                {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %} {% block js %} {% endblock js %}

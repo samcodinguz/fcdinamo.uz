@@ -4,6 +4,11 @@
         <nav class="container">
             <div class="collapse navbar-collapse" id="topnav-menu">
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}" role="button">
+                            <span class="menu-text">Bosh sahifa</span>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-news" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="menu-text">Yangiliklar</span>
@@ -11,10 +16,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-news">
                             <a href="{% url 'news_all' %}" class="dropdown-item"><span>Barcha yangiliklar</span></a>
-                            <a href="{% url 'news_mens' %}" class="dropdown-item"><span>Erkaklar jamoasi</span></a>
-                            <a href="{% url 'news_womens' %}" class="dropdown-item"><span>Ayollar jamoasi</span></a>
-                            <a href="{% url 'news_academy' %}" class="dropdown-item"><span>Akademiya yangiliklari</span></a>
-                            <a href="{% url 'news_club' %}" class="dropdown-item"><span>Klub yangiliklari</span></a>
+                            {% for category in categorys %}
+                            <a href="{% url 'news' category.code %}" class="dropdown-item"><span>{{ category.name }}</span></a>
+                            {% endfor %}
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -29,8 +33,9 @@
                                     <div class="menu-arrow"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-submenu-finished">
-                                    <a href="{% url 'matches_finished_mens' %}" class="dropdown-item"><span>Erkaklar</span></a>
-                                    <a href="{% url 'matches_finished_womens' %}" class="dropdown-item"><span>Ayollar</span></a>
+                                    {% for category in categorys %}
+                                    <a href="{% url 'matches_finished' category.code %}" class="dropdown-item"><span>{{ category.name }}</span></a>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="dropdown">
@@ -39,8 +44,9 @@
                                     <div class="menu-arrow"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-submenu-upcoming">
-                                    <a href="{% url 'matches_upcoming_mens' %}" class="dropdown-item"><span>Erkaklar</span></a>
-                                    <a href="{% url 'matches_upcoming_womens' %}" class="dropdown-item"><span>Ayollar</span></a>
+                                    {% for category in categorys %}
+                                        <a href="{% url 'matches_upcoming' category.code %}" class="dropdown-item"><span>{{ category.name }}</span></a>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="dropdown">
@@ -49,8 +55,9 @@
                                     <div class="menu-arrow"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-submenu-tables">
-                                    <a href="{% url 'standings_mens' %}" class="dropdown-item"><span>Erkaklar</span></a>
-                                    <a href="{% url 'standings_womens' %}" class="dropdown-item"><span>Ayollar</span></a>
+                                    {% for category in categorys %}
+                                        <a href="{% url 'standings' category.code %}" class="dropdown-item"><span>{{ category.name }}</span></a>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -63,8 +70,9 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-team">
                             <a href="{% url 'managements' %}" class="dropdown-item"><span>Raxbariyat</span></a>
                             <a href="{% url 'coaches' %}" class="dropdown-item"><span>Murabbiylar</span></a>
-                            <a href="{% url 'mens' %}" class="dropdown-item"><span>Erkaklar jamoasi</span></a>
-                            <a href="{% url 'womens' %}" class="dropdown-item"><span>Ayollar jamoasi</span></a>
+                            {% for category in categorys %}
+                            <a href="{% url 'players' category.code %}" class="dropdown-item"><span>{{ category.name }}</span></a>
+                            {% endfor %}
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -73,9 +81,9 @@
                             <div class="menu-arrow"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-club">
-                            <a href="#" class="dropdown-item"><span>Klub tarixi</span></a>
-                            <a href="#" class="dropdown-item"><span>Yutuqlar</span></a>
-                            <a href="#" class="dropdown-item"><span>Stadion</span></a>
+                            <a href="{% url 'club_history' %}" class="dropdown-item"><span>Klub tarixi</span></a>
+                            <a href="{% url 'club_achievements' %}" class="dropdown-item"><span>Yutuqlar</span></a>
+                            <a href="{% url 'club_stadium' %}" class="dropdown-item"><span>Stadion</span></a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -86,16 +94,6 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-media">
                             <a href="#" class="dropdown-item"><span>Foto lavhalar</span></a>
                             <a href="#" class="dropdown-item"><span>Video lavhalar</span></a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-academy" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="menu-text">Akademiya</span>
-                            <div class="menu-arrow"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-academy">
-                            <a href="#" class="dropdown-item"><span>Akademiya haqida</span></a>
-                            <a href="#" class="dropdown-item"><span>Xodimlar ro'yxati</span></a>
                         </div>
                     </li>
                     <li class="nav-item">

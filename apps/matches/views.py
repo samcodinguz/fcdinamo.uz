@@ -3,36 +3,36 @@ from apps.leagues.models import Season
 from apps.core.utils import get_base_context
 from . import utils
 
-def matches_finished_mens(request):
+def matches_finished(request, code):
 
     season = request.GET.get('season')
-    seasons = Season.objects.filter(team_type='men').order_by('-year')
+    seasons = Season.objects.filter(team_type__code=code).order_by('-year')
 
     if season:
         season = seasons.filter(year=season).first()
     else:
         season = seasons.first()
 
-    matches_finished_men = utils.get_matches(season, team_type='men', finished=True, order='last', single=False)
+    matches_finished = utils.get_matches(season, team_type=code, finished=True, order='last', single=False)
 
-    years = Season.objects.filter(team_type='men').values_list('year', flat=True).distinct().order_by('-year')
+    years = Season.objects.filter(team_type__code=code).values_list('year', flat=True).distinct().order_by('-year')
 
     seasons_year = [
         {
             'year': year,
-            'label': f'{year}/{(year+1)%100}'
+            'label': year
         }
         for year in years
     ]
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_finished_mens', 'args': []},
-        {'title': 'finished', 'url': 'matches_finished_mens', 'args': []},
-        {'title': 'mens', 'url': 'matches_finished_mens', 'args': []},
+        {'title': 'matches', 'url': 'matches_finished', 'args': [code]},
+        {'title': 'finished', 'url': 'matches_finished', 'args': [code]},
+        {'title': code, 'url': 'matches_finished', 'args': [code]},
     ]
     context = {
-        'grouped_matches': utils.group_matches_by_month(matches_finished_men),
+        'grouped_matches': utils.group_matches_by_month(matches_finished),
         'seasons': seasons,
         'seasons_year': seasons_year,
         'current_season': season.year if season else None,
@@ -43,59 +43,18 @@ def matches_finished_mens(request):
     }
     context.update(get_base_context(request))
 
-    return render(request, 'matches/finished/men.html', context)
+    return render(request, 'matches/finished.html', context)
 
-def matches_finished_womens(request):
-
-    season = request.GET.get('season')
-    seasons = Season.objects.filter(team_type='women').order_by('-year')
-
-    if season:
-        season = seasons.filter(year=season).first()
-    else:
-        season = seasons.first()
-
-    matches_finished_women = utils.get_matches(season, team_type='women', finished=True, order='last', single=False)
-    years = Season.objects.filter(team_type='women').values_list('year', flat=True).distinct().order_by('-year')
-
-    seasons_year = [
-        {
-            'year': year,
-            'label': f'{year}/{(year+1)%100}'
-        }
-        for year in years
-    ]
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_finished_womens', 'args': []},
-        {'title': 'finished', 'url': 'matches_finished_womens', 'args': []},
-        {'title': 'womens', 'url': 'matches_finished_womens', 'args': []},
-    ]
-    context = {
-        'grouped_matches': utils.group_matches_by_month(matches_finished_women),
-        'seasons': seasons,
-        'seasons_year': seasons_year,
-        'current_season': season.year if season else None,
-        'page_title': 'Yakunlangan o\'yinlar',
-        'paths': paths,
-        'women': 'active',
-        'finished': 'active',
-    }
-    context.update(get_base_context(request))
-
-    return render(request, 'matches/finished/women.html', context)
-
-def matches_upcoming_mens(request):
+def matches_upcoming(request, code):
 
     season = Season.objects.order_by('-year').first()
-    matches_upcoming_all = utils.get_matches(season, team_type='men', finished=False, order='last', single=False)
+    matches_upcoming_all = utils.get_matches(season, team_type=code, finished=False, order='last', single=False)
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_upcoming_mens', 'args': []},
-        {'title': 'upcoming', 'url': 'matches_upcoming_mens', 'args': []},
-        {'title': 'mens', 'url': 'matches_upcoming_mens', 'args': []},
+        {'title': 'matches', 'url': 'matches_upcoming', 'args': [code]},
+        {'title': 'upcoming', 'url': 'matches_upcoming', 'args': [code]},
+        {'title': code, 'url': 'matches_upcoming', 'args': [code]},
     ]
     context = {
         'grouped_matches': utils.group_matches_by_month(matches_upcoming_all),
@@ -106,26 +65,4 @@ def matches_upcoming_mens(request):
     }
     context.update(get_base_context(request))
 
-    return render(request, 'matches/upcoming/men.html', context)
-
-def matches_upcoming_womens(request):
-
-    season = Season.objects.order_by('-year').first()
-    matches_upcoming_all = utils.get_matches(season, team_type='women', finished=False, order='last', single=False)
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_upcoming_womens', 'args': []},
-        {'title': 'upcoming', 'url': 'matches_upcoming_womens', 'args': []},
-        {'title': 'womens', 'url': 'matches_upcoming_womens', 'args': []},
-    ]
-    context = {
-        'grouped_matches': utils.group_matches_by_month(matches_upcoming_all),
-        'page_title': 'Navbatdagi o\'yinlar',
-        'paths': paths,
-        'women': 'active',
-        'upcoming': 'active',
-    }
-    context.update(get_base_context(request))
-
-    return render(request, 'matches/upcoming/women.html', context)
+    return render(request, 'matches/upcoming.html', context)

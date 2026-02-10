@@ -1,0 +1,154 @@
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} 
+<!-- Summernote Plugin CSS -->
+<link href="{% static 'plugins/summernote/summernote-bs5.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="me-2 fw-semibold">Filter:</span>
+                <form method="get" class="d-flex gap-2">
+                    <!-- Category -->
+                    <select class="form-select" name="category" onchange="this.form.submit()">
+                        <option value="all">Barchasi</option>
+                        {% for cat in categorys %}
+                        <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <!-- Position -->
+                    <select class="form-select" name="position" onchange="this.form.submit()">
+                        <option value="all">Barchasi</option>
+                        {% for pos in positions %}
+                        <option value="{{ pos.id }}" {% if position == pos.id %}selected{% endif %}>
+                            {{ pos.title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <!-- Records Per Page -->
+                    <select class="form-select form-control my-1 my-md-0" name="per_page" onchange="this.form.submit()">
+                        <option value="5" {% if per_page == "5" %}selected{% endif %}>5</option>
+                        <option value="10" {% if per_page == "10" %}selected{% endif %}>10</option>
+                        <option value="15" {% if per_page == "15" %}selected{% endif %}>15</option>
+                        <option value="20" {% if per_page == "20" %}selected{% endif %}>20</option>
+                    </select>
+                </form>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div data-table  data-table-rows-per-page="{{ per_page }}" class="card">
+                    <div class="card-header border-light justify-content-between">
+                        <div class="d-flex gap-2">
+                            <div class="app-search">
+                                <input data-table-search type="search" class="form-control" placeholder="Qidiruv..." />
+                                <i class="ti ti-search app-search-icon text-muted"></i>
+                            </div>
+                            <button class="btn btn-danger d-none" type="submit" data-table-delete-selected>
+                                Delete
+                            </button>
+                        </div>
+
+                        <div class="d-flex gap-1">
+                            <a href="{% url 'judge_coachs_add' %}" class="btn btn-primary">
+                                <i class="ti ti-plus me-1 fs-sm"></i>
+                                Murabbiy qo'shish
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+                            <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+                                <tr class="text-uppercase fs-xxs">
+                                    <th class="ps-3" style="width: 1%">
+                                        <input data-table-select-all class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" id="select-all-products" value="option" />
+                                    </th>
+                                    <th style="width: 1%;">Img</th>
+                                    <th data-table-sort data-column="name">Murabbiy nomi</th>
+                                    <th data-table-sort data-column="position">Lavozim</th>
+                                    <th data-table-sort data-column="date_of_birth">Tug'ilgan sana</th>
+                                    <th data-table-sort data-column="location">Tug'ilgan joy</th>
+                                    <th data-table-sort data-column="joined_date">Klubga kelgan sana</th>
+                                    <th class="text-center" style="width: 1%">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for coach in coachs_list %}
+                                <tr>
+                                    <td class="ps-3">
+                                        <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" name="selected_ids" value="{{ coach.id }}" value="option" />
+                                    </td>
+                                    <td>
+                                        <div class="avatar-lg d-flex justify-content-center align-items-center">
+                                            <img src="{{ coach.image.url }}" alt="{{ coach.name }}" class="img-fluid rounded" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ coach.name }}
+                                    </td>
+                                    <td>{{ coach.position }}</td>
+                                    <td>{{ coach.date_of_birth|date:"d-m-Y" }}</td>
+                                    <td>{{ coach.location }}</td>
+                                    <td>{{ coach.joined_date|date:"d-m-Y" }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="{% url 'coach_detail' coach.id %}" class="btn btn-default btn-icon btn-sm">
+                                                <i class="ti ti-eye fs-lg"></i>
+                                            </a>
+                                            <a href="{% url 'judge_coachs_edit' coach.id %}" class="btn btn-default btn-icon btn-sm">
+                                                <i class="ti ti-edit fs-lg"></i>
+                                            </a>
+                                            <a href="{% url 'judge_coachs_delete' coach.id %}" class="btn btn-default btn-icon btn-sm single-delete-btn">
+                                                <i class="ti ti-trash fs-lg"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
+                                <li class="page-item {% if not coachs_list.has_previous %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if coachs_list.has_previous %}?page={{ coachs_list.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% for page in pagination_range %}
+                                {% if page == '...' %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% elif page == coachs_list.number %}
+                                <li class="page-item active"><a class="page-link" href="?{% if category %}category={{ category }}&{% endif %}{% if position %}position={{ position }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                                {% else %}
+                                <li class="page-item"><a class="page-link" href="?{% if category %}category={{ category }}&{% endif %}{% if position %}position={{ position }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                <li class="page-item {% if not coachs_list.has_next %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if coachs_list.has_next %}?{% if category %}category={{ category }}&{% endif %}{% if position %}position={{ position }}&{% endif %}{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ coachs_list.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+</div>
+{% endblock content %} {% block js %}
+<!-- Custom table -->
+<script src="{% static 'js/pages/custom-table.js' %}"></script>
+<!-- Jquery for Summernote-->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Summernote Plugin Js -->
+<script src="{% static 'plugins/summernote/summernote-bs5.min.js' %}"></script>
+<!-- Summernote Demo Js -->
+<script src="{% static 'js/pages/form-summernote.js' %}"></script>
+{% endblock js %}

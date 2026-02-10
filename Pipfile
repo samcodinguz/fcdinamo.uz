@@ -8,6 +8,8 @@ django = "*"
 pillow = "*"
 whitenoise = "*"
 gunicorn = "*"
+mysqlclient = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

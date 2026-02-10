@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, NewsCategory, NewsTag
+from .models import News, NewsTag
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):

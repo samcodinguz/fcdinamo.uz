@@ -3,7 +3,7 @@ from .models import Season, League
 # Erkaklar yoki ayollarni oxirgi seasonini aniqlaydi
 def get_last_season(team_type='men'):
     last_sesason = Season.objects.filter(
-        is_active=True, team_type=team_type
+        is_active=True, team_type__code=team_type
     ).order_by('-year').first()
     return last_sesason
     
@@ -16,5 +16,5 @@ def get_last_season_year(team_type='men'):
 def get_active_leagues(team_type):
     return League.objects.filter(
         season__is_active=True, 
-        season__team_type=team_type
+        season__team_type__code=team_type
     ).distinct().order_by('name')

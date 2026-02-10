@@ -4,15 +4,19 @@ from django.db.models import Q
 from collections import OrderedDict
 
 def get_main_team():
-    team = MyClub.objects.select_related('team').first()
-    return team
+    club = MyClub.objects.select_related('team').first()
+    if club and club.team:
+        return club.team
+    return None
 
 def get_matches(season, team_type=None, finished=None, order='last', single=True):
 
     if not season:
-        return None
+        return Match.objects.none()
     
-    team = get_main_team().team
+    team = get_main_team()
+    if not team:
+        return Match.objects.none()
     
     result = Match.objects.filter(season__year=season.year).filter(
         Q(home_team=team) | Q(away_team=team)
@@ -22,7 +26,7 @@ def get_matches(season, team_type=None, finished=None, order='last', single=True
         result = result.filter(is_finished=finished)
 
     if team_type:
-        result = result.filter(season__team_type=team_type)
+        result = result.filter(season__team_type__code=team_type)
 
     if order == 'last':
         result = result.order_by('-match_date')

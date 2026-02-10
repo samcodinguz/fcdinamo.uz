@@ -4,6 +4,70 @@
         <nav class="container-fluid">
             <div class="collapse navbar-collapse" id="topnav-menu">
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'judge_club_infos' %}" role="button">
+                            <span class="menu-text">Klub sozlamalari</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-club" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="menu-text">O'yinchi & murabbiylar</span>
+                            <div class="menu-arrow"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-club">
+                            <a href="{% url 'judge_team_type' %}" class="dropdown-item"><span>Jamoa turlarini sozlash</span></a>
+                            <div class="dropdown">
+                                <a class="dropdown-item dropdown-toggle drop-arrow-none" href="#" id="topnav-submenu-player" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>O'yinchilar</span>
+                                    <div class="menu-arrow"></div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-submenu-player">
+                                    <a href="{% url 'judge_players_position' %}" class="dropdown-item"><span>O'yinchi turlari</span></a>
+                                    <a href="{% url 'judge_players' %}" class="dropdown-item"><span>O'yinchilarni sozlash</span></a>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <a class="dropdown-item dropdown-toggle drop-arrow-none" href="#" id="topnav-submenu-coach" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>Murabbiylar</span>
+                                    <div class="menu-arrow"></div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-submenu-coach">
+                                    <a href="{% url 'judge_coachs_position' %}" class="dropdown-item"><span>Murabbiy turlari</span></a>
+                                    <a href="{% url 'judge_coachs' %}" class="dropdown-item"><span>Murabbiylarni sozlash</span></a>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <a class="dropdown-item dropdown-toggle drop-arrow-none" href="#" id="topnav-submenu-management" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>Rahbariyat</span>
+                                    <div class="menu-arrow"></div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-submenu-management">
+                                    <a href="{% url 'judge_managements_position' %}" class="dropdown-item"><span>Rahbariyat lavozimlari</span></a>
+                                    <a href="{% url 'judge_managements' %}" class="dropdown-item"><span>Rahbariyatni sozlash</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-seasons" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="menu-text">Lega & Mavsum</span>
+                            <div class="menu-arrow"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-seasons">
+                            <a href="{% url 'judge_leagues' %}" class="dropdown-item"><span>Legalarni sozlash</span></a>
+                            <a href="{% url 'judge_seasons' %}" class="dropdown-item"><span>Mavsumlarni sozlash</span></a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-matches" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="menu-text">O'yinlar & Klublar</span>
+                            <div class="menu-arrow"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-matches">
+                            <a href="{% url 'judge_clubs' %}" class="dropdown-item"><span>Klublarni sozlash</span></a>
+                            <a href="{% url 'judge_matches' %}" class="dropdown-item"><span>O'yinlarni sozlash</span></a>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle drop-arrow-none" href="#" id="topnav-news" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="menu-text">Yangiliklar</span>

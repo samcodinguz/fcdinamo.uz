@@ -1,27 +1,18 @@
 from collections import OrderedDict
-from .models import Coach
+from apps.teams.models import Coach, PlayerPosition
 
-def group_players_by_position(players, team_type='men'):
-
-    POSITION_LABELS = OrderedDict([
-        (0, "Darvozabonlar"),
-        (1, "Himoyachilar"),
-        (2, "Yarim himoyachilar"),
-        (3, "Hujumchilar"),
-    ])
+def group_players_by_position(players, team_type_obj):
 
     grouped = OrderedDict()
+    positions = PlayerPosition.objects.all().order_by('order')
 
-    for order, label in POSITION_LABELS.items():
-        print(label)
-        filtered = players.filter(
-            position__order=order
-        ).order_by('order')
+    for position in positions:
+        filtered = players.filter(position=position).order_by('order')
 
         if filtered.exists():
-            grouped[label] = filtered
+            grouped[position.title] = filtered
 
-    coaches = Coach.objects.filter(team_type=team_type).order_by('order')
+    coaches = Coach.objects.filter(team_type=team_type_obj).order_by('order')
     if coaches.exists():
         grouped["Murabbiylar"] = coaches
     return grouped

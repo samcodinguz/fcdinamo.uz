@@ -34,6 +34,7 @@
                 </div>
             </div>
             {% block content %}
+            {% if news_first %}
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -124,7 +125,7 @@
                                         <h4 class="mb-0">Navbatdagi o'yin</h4>
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
-                                        <a href="{% url 'matches_upcoming_mens' %}" class="fw-medium d-inline-flex align-items-center gap-1">
+                                        <a href="{% url 'matches_upcoming' 'men' %}" class="fw-medium d-inline-flex align-items-center gap-1">
                                             Barcha o'yinlar <i class="ti ti-arrow-right"></i>
                                         </a>
                                     </div>
@@ -174,7 +175,7 @@
                                         <h4 class="mb-0">Oxirgi o'yin natijasi</h4>
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
-                                        <a href="{% url 'matches_finished_mens' %}" class="fw-medium d-inline-flex align-items-center gap-1">
+                                        <a href="{% url 'matches_finished' 'men' %}" class="fw-medium d-inline-flex align-items-center gap-1">
                                             Barcha o'yinlar <i class="ti ti-arrow-right"></i>
                                         </a>
                                     </div>
@@ -225,6 +226,7 @@
                 </div>
                 <hr class="my-3">
             </div>
+            {% endif %}
             {% endblock content %}
             {% include 'core/components/footer.html' %}
         </div>

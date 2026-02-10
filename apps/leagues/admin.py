@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import League, Season
+from .models import League, Season, TeamType
 
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
@@ -12,3 +12,5 @@ class SeasonAdmin(admin.ModelAdmin):
     list_display = ('league', 'year', 'team_type', 'is_active')
     list_filter = ('league',)
     search_fields = ('league',)
+
+admin.site.register(TeamType)

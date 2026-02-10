@@ -6,7 +6,7 @@
             <div class="col-lg-4">
                 <div class="card-body position-relative border-bottom border-dashed">
                     <img src="{{ detail.image.url }}" alt="{{ detail.name }}" class="img-fluid w-100 mb-3">
-                    <h3 class="text-dark text-center">{{ detail.name }}</h3>
+                    <h3 class="text-dark text-center">{{ detail.name|title }}</h3>
                     {% if detail.number %}
                         <h1 class="player-number-dark mt-3 me-3">{{ detail.number }}</h1>
                     {% endif %}
@@ -15,7 +15,7 @@
                     <h3 class="text-dark">Ma'lumot</h3>
                     <small>Tug'ilgan sana</small>
                     <h4 class="border-bottom">{{ detail.date_of_birth|date:'d-m-Y' }}</h4>
-                    <small>Manzil</small>
+                    <small>Tug'ilgan joy</small>
                     <h4 class="border-bottom">{{ detail.location }}</h4>
                     <small>Lavozimi</small>
                     <h4 class="border-bottom">{{ detail.position.title }}</h4>
@@ -43,60 +43,13 @@
                         <h3 class="text-dark">Biografiya</h3>
                         <blockquote class="blockquote">
                             <p>
-                                {{ detail.biography }}
+                                {{ detail.biography|safe }}
                             </p>
                         </blockquote>
                     </div>
                 </div>
             </div>
             <!-- end col-->
-        </div>
-        <hr class="border-dashed">
-        <div class="row">
-            {% for group_name, players in groups.items %}
-            <div class="col-12">
-                <div class="card-body">
-                    <h3 class="text-dark mb-3">Boshqa {{ group_name|lower }}lar</h3>
-                    <div class="row">
-                    {% for item in players %}
-                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3">
-                            {% if url == 'management' %}
-                            <a href="{% url 'management_detail' item.id %}">
-                            {% elif url == 'coach' %}
-                            <a href="{% url 'coach_detail' item.id %}">
-                            {% elif url == 'men' %}
-                            {% if item.number %}
-                            <a href="{% url 'men_detail' item.id %}">
-                            {% else %}
-                            <a href="{% url 'coach_detail' item.id %}">
-                            {% endif %}
-                            {% else %}
-                            {% if item.number %}
-                            <a href="{% url 'women_detail' item.id %}">
-                            {% else %}
-                            <a href="{% url 'coach_detail' item.id %}">
-                            {% endif %}
-                            {% endif %}
-                                <div class="card border-light h-100 rounded-0">
-                                    <div class="card-body text-center player-card p-0">
-                                        <div class="{% if item.number %}player-card-bg{% else %}bg-light{% endif %} position-relative mb-3">
-                                            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid w-100">
-                                        </div>
-                                        <h3 class="text-dark player-title">{{ item.name }}</h3>
-                                        {% if item.number %}
-                                            <h1 class="player-number">{{ item.number }}</h1>
-                                        {% else %}
-                                            <span class="text-muted">{{ item.position.title }}</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
         </div>
     </div>
 </div>

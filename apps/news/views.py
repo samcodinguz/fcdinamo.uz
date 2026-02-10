@@ -36,9 +36,9 @@ def news_all(request):
     context.update(get_base_context(request))
     return render(request, 'news/news.html', context)
 
-def news_mens(request):
+def news(request, code):
 
-    news_list = News.objects.filter(is_published=True, category__id=1).select_related('category').order_by('-created_at')
+    news_list = News.objects.filter(is_published=True, category__code=code).select_related('category').order_by('-created_at')
     news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
 
     season = Season.objects.order_by('-year').first()
@@ -47,8 +47,8 @@ def news_mens(request):
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'news', 'url': 'news_all', 'args': []},
-        {'title': 'mens', 'url': 'news_mens', 'args': []},
+        {'title': 'news', 'url': 'news', 'args': [code]},
+        {'title': code, 'url': 'news', 'args': [code]},
     ]
 
     context = {
@@ -60,86 +60,7 @@ def news_mens(request):
         'paths': paths,
     }
     context.update(get_base_context(request))
-    return render(request, 'news/mens.html', context)
-
-def news_womens(request):
-
-    news_list = News.objects.filter(is_published=True, category__id=2).select_related('category').order_by('-created_at')
-    news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
-
-    season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    next_women_match = get_matches(season, team_type='women', finished=False, order='first', single=True)
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'news', 'url': 'news_all', 'args': []},
-        {'title': 'womens', 'url': 'news_womens', 'args': []},
-    ]
-
-    context = {
-        'news_list': news_list,
-        'pagination_range': pagination_range,
-        'next_men_match': next_men_match,
-        'next_women_match': next_women_match,
-        'page_title': "Ayollar jamoasi yangiliklari",
-        'paths': paths,
-    }
-    context.update(get_base_context(request))
-    return render(request, 'news/womens.html', context)
-
-def news_academy(request):
-
-    news_list = News.objects.filter(is_published=True, category__id=3).select_related('category').order_by('-created_at')
-    news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
-
-    season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    next_women_match = get_matches(season, team_type='women', finished=False, order='first', single=True)
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'news', 'url': 'news_all', 'args': []},
-        {'title': 'academy', 'url': 'news_academy', 'args': []},
-    ]
-
-    context = {
-        'news_list': news_list,
-        'pagination_range': pagination_range,
-        'next_men_match': next_men_match,
-        'next_women_match': next_women_match,
-        'page_title': "Akademiya yangiliklari",
-        'paths': paths,
-    }
-    context.update(get_base_context(request))
-    return render(request, 'news/academy.html', context)
-
-def news_club(request):
-
-    news_list = News.objects.filter(is_published=True, category__id=4).select_related('category').order_by('-created_at')
-    news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
-
-    season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    next_women_match = get_matches(season, team_type='women', finished=False, order='first', single=True)
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'news', 'url': 'news_all', 'args': []},
-        {'title': 'club', 'url': 'news_club', 'args': []},
-    ]
-
-    context = {
-        'news_list': news_list,
-        'pagination_range': pagination_range,
-        'next_men_match': next_men_match,
-        'next_women_match': next_women_match,
-        'page_title': "Klub yangiliklari",
-        'paths': paths,
-    }
-    context.update(get_base_context(request))
-    return render(request, 'news/club.html', context)
-
+    return render(request, f'news/news.html', context)
 
 def news_detail(request, news_detail_id):
 
@@ -153,12 +74,11 @@ def news_detail(request, news_detail_id):
 
     related_news = (News.objects.filter(is_published=True, category=news_detail.category).exclude(pk=news_detail.pk).select_related('category').order_by('?')[:4])
     most_viewed_news = (News.objects.filter(is_published=True).exclude(pk=news_detail.pk).order_by('-views_count')[:4])
-
-    title_news = ['mens', 'womens', 'academy', 'club'][news_detail.category.id-1]
+    
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
         {'title': 'news', 'url': 'news_all', 'args': []},
-        {'title': title_news, 'url': f'news_{title_news}', 'args': []},
+        {'title': news_detail.category.code, 'url': 'news', 'args': [news_detail.category.code]},
         {'title': news_detail_id, 'url': 'news_detail', 'args': [news_detail_id]},
     ]
 
@@ -166,7 +86,7 @@ def news_detail(request, news_detail_id):
         'news_detail': news_detail,
         'related_news': related_news,
         'most_viewed_news': most_viewed_news,
-        'page_title': news_detail.title,
+        'page_title': news_detail.category.name,
         'paths': paths,
     }
 

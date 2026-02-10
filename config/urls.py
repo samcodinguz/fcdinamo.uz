@@ -11,6 +11,7 @@ urlpatterns = [
     path('standings/', include('apps.standings.urls')),
     path('teams/', include('apps.teams.urls')),
     path('judge/', include('apps.judge.urls')),
+    path('club/', include('apps.club.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

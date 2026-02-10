@@ -4,9 +4,9 @@ from apps.teams.models import Team
 
 class Match(models.Model):
 
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
-    home_team = models.ForeignKey(Team, related_name='home_matches', on_delete=models.CASCADE)
-    away_team = models.ForeignKey(Team, related_name='away_matches', on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.PROTECT)
+    home_team = models.ForeignKey(Team, related_name='home_matches', on_delete=models.PROTECT)
+    away_team = models.ForeignKey(Team, related_name='away_matches', on_delete=models.PROTECT)
 
     home_goals = models.PositiveSmallIntegerField(default=0)
     away_goals = models.PositiveSmallIntegerField(default=0)

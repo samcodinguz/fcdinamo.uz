@@ -1,0 +1,252 @@
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="me-2 fw-semibold">Filter:</span>
+                <form method="get" class="d-flex gap-2">
+                    <!-- Records Per Page -->
+                    <select class="form-select form-control my-1 my-md-0" name="per_page" onchange="this.form.submit()">
+                        <option value="5" {% if per_page == "5" %}selected{% endif %}>5</option>
+                        <option value="10" {% if per_page == "10" %}selected{% endif %}>10</option>
+                        <option value="15" {% if per_page == "15" %}selected{% endif %}>15</option>
+                        <option value="20" {% if per_page == "20" %}selected{% endif %}>20</option>
+                    </select>
+                </form>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div data-table  data-table-rows-per-page="{{ per_page }}" class="card">
+                    <div class="card-header border-light justify-content-between">
+                        <div class="d-flex gap-2">
+                            <div class="app-search">
+                                <input data-table-search type="search" class="form-control" placeholder="Qidiruv..." />
+                                <i class="ti ti-search app-search-icon text-muted"></i>
+                            </div>
+                            <button class="btn btn-danger d-none" type="submit" data-table-delete-selected>
+                                Delete
+                            </button>
+                        </div>
+
+                        <div class="d-flex gap-1">
+                            <a href="#!" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSeasonModal">
+                                <i class="ti ti-plus me-1 fs-sm"></i>
+                                Mavsum qo'shish
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+                            <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+                                <tr class="text-uppercase fs-xxs">
+                                    <th class="ps-3" style="width: 1%">
+                                        <input data-table-select-all class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" id="select-all-products" value="option" />
+                                    </th>
+                                    <th data-table-sort data-column="name">Lega nomi</th>
+                                    <th data-table-sort data-column="season">Mavsum</th>
+                                    <th data-table-sort data-column="team_type">Jamoa turi</th>
+                                    <th data-table-sort data-column="is_active">Faolligi</th>
+                                    <th class="text-center" style="width: 1%">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for season in seasons_list %}
+                                <tr>
+                                    <td class="ps-3">
+                                        <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" name="selected_ids" value="{{ season.id }}" value="option" />
+                                    </td>
+                                    <td>
+                                        {{ season.league.name }}
+                                    </td>
+                                    <td>
+                                        {{ season.year }}
+                                    </td>
+                                    <td>
+                                        {{ season.team_type.name }}
+                                    </td>
+                                    <td>
+                                        {% if season.is_active %}
+                                        <span class="badge badge-soft-primary p-1">Faol mavsum</span>
+                                        {% else %}
+                                        <span class="badge badge-soft-danger p-1">Yakunlangan</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="{% url 'judge_seasons_edit' season.id %}" class="btn btn-default btn-icon btn-sm edit-season-btn" data-bs-toggle="modal" data-bs-target="#editSeasonModal" data-league="{{ season.league.id }}" data-year="{{ season.year }}" data-type="{{ season.team_type.id }}" data-active="{{ season.is_active }}">
+                                                <i class="ti ti-edit fs-lg"></i>
+                                            </a>
+                                            <a href="{% url 'judge_seasons_delete' season.id %}" class="btn btn-default btn-icon btn-sm single-delete-btn">
+                                                <i class="ti ti-trash fs-lg"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
+                                <li class="page-item {% if not seasons_list.has_previous %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if seasons_list.has_previous %}?page={{ seasons_list.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% for page in pagination_range %}
+                                {% if page == '...' %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% elif page == seasons_list.number %}
+                                <li class="page-item active"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                                {% else %}
+                                <li class="page-item"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                <li class="page-item {% if not seasons_list.has_next %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if seasons_list.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ seasons_list.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+    <!-- Add New season Modal -->
+    <div class="modal fade" id="addSeasonModal" tabindex="-1" aria-labelledby="addSeasonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSeasonModalLabel">Yangi mavsum qo'shish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="post" action="{% url 'judge_seasons_add' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- League -->
+                            <div class="col-12">
+                                <label for="addSeasonName" class="form-label">Lega <span class="text-danger">*</span></label>
+                                <select name="league" id="addSeasonLeague" class="form-select" required>
+                                    {% for league in leagues %}
+                                    <option value="{{ league.id }}">{{ league.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Year -->
+                            <div class="col-12">
+                                <label class="form-label" for="addSeasonYear">Mavsum yili <span class="text-danger">*</span></label>
+                                <input type="number" name="year" id="addSeasonYear" class="form-control" placeholder="Mavsum yilini kiriting" value="{{ current_year }}" required>
+                            </div>
+                            <!-- Team type -->
+                            <div class="col-12">
+                                <label class="form-label" for="addSeasonType">Jamoa turi <span class="text-danger">*</span></label>
+                                <select name="team_type" id="addSeasonType" class="form-select" required>
+                                    {% for t in team_types %}
+                                    <option value="{{ t.id }}">{{ t.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
+                        <button type="submit" class="btn btn-primary">Mavsum qo'shish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-->
+    
+    <!-- Edit season Modal -->
+    <div class="modal fade" id="editSeasonModal" tabindex="-1" aria-labelledby="editSeasonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSeasonModalLabel">Mavsumni tahirilash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="post" id="editSeasonForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- League -->
+                            <div class="col-12">
+                                <label for="editSeasonName" class="form-label">Lega <span class="text-danger">*</span></label>
+                                <select name="league" id="editSeasonLeague" class="form-select" required>
+                                    {% for league in leagues %}
+                                    <option value="{{ league.id }}">{{ league.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Year -->
+                            <div class="col-12">
+                                <label class="form-label" for="editSeasonYear">Mavsum yili <span class="text-danger">*</span></label>
+                                <input type="number" name="year" id="editSeasonYear" class="form-control" required>
+                            </div>
+                            <!-- Team type -->
+                            <div class="col-12">
+                                <label class="form-label" for="editSeasonType">Jamoa turi <span class="text-danger">*</span></label>
+                                <select name="team_type" id="editSeasonType" class="form-select" required>
+                                    {% for t in team_types %}
+                                    <option value="{{ t.id }}">{{ t.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Is active -->
+                            <div class="col-12">
+                                <div class="form-check fs-lg mb-2">
+                                    <input type="checkbox" class="form-check-input" id="editIsActive" name="is_active">
+                                    <label for="checkIsActive" class="form-check-label fs-base">Faol mavsummi?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-->
+</div>
+{% endblock content %} {% block js %}
+<!-- Custom table -->
+<script src="{% static 'js/pages/custom-table.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButtons = document.querySelectorAll(".edit-season-btn");
+        const form = document.getElementById("editSeasonForm");
+
+        const leagueSelect = document.getElementById("editSeasonLeague");
+        const yearInput = document.getElementById("editSeasonYear");
+        const typeSelect = document.getElementById("editSeasonType");
+        const activeCheckbox = document.getElementById("editIsActive");
+        
+        editButtons.forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                form.action = this.href;
+                leagueSelect.value = this.dataset.league;
+                yearInput.value = this.dataset.year;
+                typeSelect.value = this.dataset.type;
+                activeCheckbox.checked = this.dataset.active === "True";
+            });
+        });
+    });
+</script>
+{% endblock js %}

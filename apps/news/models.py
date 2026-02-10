@@ -1,11 +1,6 @@
 from django.db import models
 from apps.users.models import CustomUser
-
-class NewsCategory(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
+from apps.leagues.models import TeamType
 
 class NewsTag(models.Model):
     name = models.CharField(max_length=50)
@@ -14,7 +9,7 @@ class NewsTag(models.Model):
         return self.name
 
 class News(models.Model):
-    category = models.ForeignKey(NewsCategory, on_delete=models.PROTECT)
+    category = models.ForeignKey(TeamType, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
 
     short_description = models.TextField()

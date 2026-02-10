@@ -1,0 +1,149 @@
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} 
+<!-- Dropzone Plugin CSS -->
+<link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet" type="text/css" />
+<!-- Summernote Plugin CSS -->
+<link href="{% static 'plugins/summernote/summernote-bs5.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xxl-12">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-xxl-8">
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Rahbar xodim qo'shish</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Rahbar nomi <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Rahbar nomini kiriting" required />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="biography" class="form-label">Rahbar haqida <span class="text-muted">(Batafsil)</span></label>
+                                            <textarea name="biography" id="biography" class="summernote"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
+
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Rahbar rasmi</h4>
+                                <p class="text-muted mb-0">Saytda rahbar chiroyli dezayn berishni hoxlasangiz 376x376 o'lchamdagi tasvir yuklang.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="image" class="form-label">Rahbar rasmi <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" id="image" name="image" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
+                    </div>
+                    <!-- end col-->
+
+                    <div class="col-xxl-4">
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Boshqa parametirlar</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+
+                                <div class="mb-0">
+                                    <label for="position" class="form-label">Lavozimi <span class="text-danger">*</span></label>
+                                    <div class="app-search">
+                                        <select class="form-select form-control my-1 my-md-0" id="position" name="position">
+                                            {% for pos in positions %}
+                                            <option value="{{ pos.id }}">
+                                                {{ pos.title }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <i class="ti ti-list-check app-search-icon text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Ma'lumotlari</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">Tug'ilgan joy <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="location" name="location" placeholder="Tug'ilgan joyini kiriting" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="date_of_birth" class="form-label">Tug'ilgan sana <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required />
+                                </div>
+                                <div class="mb-0">
+                                    <label for="email" class="form-label">E-Pochta <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-block p-3">
+                                <h4 class="card-title mb-1">Joylashuv o'rni</h4>
+                            </div>
+                            <!-- end card-header -->
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="order" class="form-label">Saytda joylashuv o'rni <span class="text-danger">*</span></label>
+                                    <div class="input-group" data-touchspin>
+                                        <button type="button" class="btn btn-light floating" data-minus>
+                                            <i class="ti ti-minus"></i>
+                                        </button>
+                                        <input type="number" class="form-control form-control-sm border-0" value="1" max="800000" id="order" name="order" required />
+                                        <button type="button" class="btn btn-light floating" data-plus>
+                                            <i class="ti ti-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row-->
+                <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                    <a href="{% url 'judge_managements' %}" class="btn btn-danger fw-semibold"> Saqlamaslik </a>
+                    <button type="submit" class="btn btn-success"> Saqlash </button>
+                </div>
+            </form>
+        </div>
+        <!-- end col-->
+    </div>
+    <!-- end row-->
+</div>
+{% endblock content %} {% block js %}
+<!-- Choices Demo Js-->
+<script src="{% static 'js/pages/form-choice.js' %}"></script>
+<!-- Jquery for Summernote-->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Summernote Plugin Js -->
+<script src="{% static 'plugins/summernote/summernote-bs5.min.js' %}"></script>
+<!-- Summernote Demo Js -->
+<script src="{% static 'js/pages/form-summernote.js' %}"></script>
+{% endblock js %}

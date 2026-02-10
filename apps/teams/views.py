@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.core.utils import get_base_context
+from apps.leagues.models import TeamType
 from apps.teams.models import Management, ManagementPosition
 from apps.teams.models import Coach, CoachPosition
-from apps.teams.models import MenPlayer, WomenPlayer, PlayerPosition
+from apps.teams.models import Player, PlayerPosition
 from apps.teams.utils import group_players_by_position
 from collections import OrderedDict
 
@@ -19,9 +20,8 @@ def managements(request):
     ]
     context = {
         'groups': grouped,
-        'page_title': 'Raxbariyat',
-        'paths': paths,
-        'url': 'management'
+        'page_title': 'Raxbariyat jamoasi',
+        'paths': paths
     }
     context.update(get_base_context(request))
     return render(request, 'teams/managements.html', context)
@@ -40,48 +40,28 @@ def coaches(request):
     ]
     context = {
         'groups': grouped,
-        'page_title': 'Murabbiylar',
-        'paths': paths,
-        'url': 'coach' 
+        'page_title': 'Murabbiylar jamoasi',
+        'paths': paths
     }
     context.update(get_base_context(request))
     return render(request, 'teams/coaches.html', context)
 
-def mens(request):
-
-    menplayers = MenPlayer.objects.filter().select_related('position').order_by('order')
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'players', 'url': 'mens', 'args': []},
-        {'title': 'mens', 'url': 'mens', 'args': []},
-    ]
-    context = {
-        'groups': group_players_by_position(menplayers, team_type='men'),
-        'page_title': 'Erkaklar jamoasi',
-        'paths': paths,
-        'url': 'men'
-    }
-    context.update(get_base_context(request))
-    return render(request, 'teams/mens.html', context)
-
-def womens(request):
-
-    womenplayers = WomenPlayer.objects.filter().select_related('position').order_by('order')
+def players(request, team_type):
+    team_type_obj = TeamType.objects.get(code=team_type)
+    players = Player.objects.filter(team_type=team_type_obj).select_related('position', 'team_type').order_by('order')
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'players', 'url': 'womens', 'args': []},
-        {'title': 'womens', 'url': 'womens', 'args': []},
+        {'title': 'players', 'url': 'players', 'args': [team_type]},
+        {'title': team_type, 'url': 'players', 'args': [team_type]},
     ]
     context = {
-        'groups': group_players_by_position(womenplayers, team_type='women'),
-        'page_title': 'Ayollar jamoasi',
-        'paths': paths,
-        'url': 'women'
+        'groups': group_players_by_position(players, team_type_obj),
+        'page_title': f'{team_type_obj.name} jamoasi',
+        'paths': paths
     }
     context.update(get_base_context(request))
-    return render(request, 'teams/womens.html', context)
+    return render(request, 'teams/players.html', context)
 
 def management_detail(request, id):
 
@@ -115,49 +95,25 @@ def coach_detail(request, id):
     context.update(get_base_context(request))
     return render(request, 'teams/detail.html', context)
 
-def men_detail(request, id):
+def players_detail(request, team_type, player_id):
 
-    mn_detail = get_object_or_404(MenPlayer, id=id)
+    teamtype = get_object_or_404(TeamType, code=team_type)
+    detail = get_object_or_404(Player, team_type=teamtype, id=player_id)
 
     grouped = OrderedDict()
-    menplayers = MenPlayer.objects.filter(position=mn_detail.position).exclude(pk=id).select_related('position').order_by('?')[:4]
-    grouped[mn_detail.position] = menplayers
+    menplayers = Player.objects.filter(position=detail.position).exclude(pk=player_id).select_related('team_type' ,'position').order_by('?')[:4]
+    grouped[detail.position] = menplayers
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'players', 'url': 'mens', 'args': []},
-        {'title': 'mens', 'url': 'mens', 'args': []},
-        {'title': id, 'url': 'men_detail', 'args': [id]},
+        {'title': 'players', 'url': 'players', 'args': [team_type]},
+        {'title': team_type, 'url': 'players', 'args': [team_type]},
+        {'title': player_id, 'url': 'players_detail', 'args': [team_type, player_id]},
     ]
     context = {
         'groups': grouped,
-        'detail': mn_detail,
-        'page_title': mn_detail.name,
-        'paths': paths,
-        'url': 'men'
-    }
-    context.update(get_base_context(request))
-    return render(request, 'teams/detail.html', context)
-
-def women_detail(request, id):
-
-    wn_detail = get_object_or_404(WomenPlayer, id=id)
-
-    grouped = OrderedDict()
-    womenplayers = WomenPlayer.objects.filter(position=wn_detail.position).exclude(pk=id).select_related('position').order_by('?')[:4]
-    grouped[wn_detail.position] = womenplayers
-
-    paths = [
-        {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'players', 'url': 'womens', 'args': []},
-        {'title': 'mens', 'url': 'womens', 'args': []},
-        {'title': id, 'url': 'women_detail', 'args': [id]},
-    ]
-    context = {
-        'groups': grouped,
-        'detail': wn_detail,
-        'page_title': wn_detail.name,
-        'paths': paths,
-        'url': 'women'
+        'detail': detail,
+        'page_title': detail.name,
+        'paths': paths
     }
     context.update(get_base_context(request))
     return render(request, 'teams/detail.html', context)
