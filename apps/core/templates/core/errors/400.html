@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-layout="topnav" data-topbar-color="dark" data-menu-color="light" data-skin="mono">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Error - 400{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Paces is a modern, responsive admin dashboard available on ThemeForest. Ideal for building CRM, CMS, project management tools, and custom web applications with a clean UI, flexible layouts, and rich features." />
+    <meta name="keywords" content="Paces, admin dashboard, ThemeForest, Bootstrap 5 admin, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template" />
+    <meta name="author" content="Coderthemes" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+    <!-- Theme Config Js -->
+    <script src="{% static 'js/config.js' %}"></script>
+    <!-- Vendor css -->
+    <link href="{% static 'css/vendors.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="{% static 'css/app.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- My css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block css %}{% endblock css %}
+</head>
+<body>
+    {% block content %}
+    <div class="auth-box overflow-hidden align-items-center d-flex">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-5 col-md-6 col-sm-8">
+                    <div class="card shadow-none border-0 p-4" style="background: none !important;">
+                        <div class="p-4 text-center">
+                            <div class="error-text-alt fs-72 text-warning">400</div>
+                            <h3 class="fw-bold text-uppercase">Xatolik yuz berdi</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    <!-- Vendor js -->
+    <script src="{% static 'js/vendors.min.js' %}"></script>
+    <!-- App js -->
+    <script src="{% static 'js/app.js' %}"></script>
+    {% block js %}{% endblock js %}
+</body>
+</html>
+

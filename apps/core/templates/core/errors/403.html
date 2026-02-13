@@ -1,0 +1,17 @@
+{% extends "core/errors/400.html" %} {% load static %} {% block title %}Error - 403{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="auth-box overflow-hidden align-items-center d-flex">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-5 col-md-6 col-sm-8">
+                <div class="card shadow-none border-0 p-4" style="background: none !important;">
+                    <div class="p-4 text-center">
+                        <div class="error-text-alt fs-72 text-warning">403</div>
+                        <h3 class="fw-bold text-uppercase">Xatolik yuz berdi</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% block js %} {% endblock js %}
