@@ -1,6 +1,22 @@
 from datetime import datetime
 from django.core.paginator import Paginator
 from apps.leagues.models import TeamType
+import re
+
+def is_strong_password(password: str) -> bool:
+    """
+    Parolni tekshiradi:
+    - Kamida 8 ta belgi
+    - 1 ta katta harf
+    - 1 ta kichik harf
+    - 1 ta raqam
+    - 1 ta maxsus belgi
+    """
+    if len(password) < 8:
+        return False
+
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$'
+    return bool(re.match(pattern, password))
 
 def get_base_context(request):
     return {

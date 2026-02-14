@@ -36,9 +36,15 @@
                 <span class="text-danger">*</span>
             </label>
             <div class="input-group">
-                <input type="password" class="form-control" id="userPassword" name="password" placeholder="••••••••" required />
+                <input type="password" class="form-control" id="userPassword" name="password" placeholder="••••••••" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%]).+$" title="Kamida 8 ta belgi, katta va kichik harf, raqam va ! @ # $ % belgilaridan biri bo‘lishi kerak" required />
             </div>
-            <div class="password-bar my-2"></div>
+            <div class="password-bar my-2">
+                <div class="strong-bar"></div>
+                <div class="strong-bar"></div>
+                <div class="strong-bar"></div>
+                <div class="strong-bar"></div>
+            </div>
+            <p class="text-muted fs-xs mb-0">Kuchli parol: 8+ belgi, A–Z, a–z, 0–9 va maxsus belgi (! @ # $ %).</p>
         </div>
 
         <div class="d-grid">
@@ -51,4 +57,6 @@
         <a href="{% url 'sign-in' %}" class="text-decoration-underline link-offset-3 fw-semibold">Kirish</a>
     </p>
 </div>
-{% endblock auth %} {% block js %} {% endblock js %}
+{% endblock auth %} {% block js %} 
+<script src="{% static 'js/pages/auth-password.js' %}"></script>
+{% endblock js %}

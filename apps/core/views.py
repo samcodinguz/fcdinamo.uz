@@ -65,14 +65,13 @@ def sign_up(request):
         username = request.POST.get('username').strip()
         email = request.POST.get('email').strip()
         password = request.POST.get('password').strip()
-        rememberme = request.POST.get('rememberme') != 'on'
 
         if not username or not email or not password:
             messages.error(request, "Iltimos barcha maydonlarni to'ldiring.")
             return redirect('sign-up')
         
-        if rememberme:
-            messages.error(request, "Iltimos, barcha shartlarga rozilik bildiring.")
+        if not utils.is_strong_password(password):
+            messages.error(request, "Parol murakkab emas")
             return redirect('sign-up')
         
         if CustomUser.objects.filter(username=username).exists():
