@@ -6,6 +6,7 @@ from apps.news.models import News
 from . import utils
 from apps.matches.utils import get_matches
 from apps.leagues.models import Season
+from .models import Contact
 
 def index(request):
 
@@ -28,6 +29,22 @@ def index(request):
     context.update(utils.get_base_context(request))
     return render(request, 'core/index.html', context)
 
+def contacts(request):
+
+    contact = Contact.objects.all().first()
+
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'contacts', 'url': 'contacts', 'args': []},
+    ]
+    context = {
+        'contact': contact,
+        'page_title': 'Bog\'lanish',
+        'paths': paths
+    }
+    context.update(utils.get_base_context(request))
+
+    return render(request, 'core/contacts/contact.html', context)
 
 def sign_in(request):
      

@@ -11,6 +11,7 @@ from apps.teams.models import Team, Player, PlayerPosition, Coach, CoachPosition
 from apps.matches.models import Match
 from apps.leagues.models import Season, League, TeamType
 from django.db.models.deletion import ProtectedError
+from apps.core.models import Contact
 import os
 
 @login_required
@@ -1622,3 +1623,35 @@ def judge_club_infos(request):
     }
     context.update(get_base_context(request))
     return render(request, 'judge/club/club.html', context)
+
+
+@login_required
+def judge_contacts(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    if request.method == 'POST':
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+
+        Contact.objects.create(
+            phone=phone,
+            email=email,
+            address=address
+        )
+        messages.success(request, "Aloqa ma'lumotlari muvaffaqiyatli yangilandi")
+        return redirect('judge_contacts')
+    
+
+    paths = [
+        {'title': 'judge', 'url': 'judge', 'args': []},
+        {'title': 'contacts', 'url': 'judge_contacts', 'args': []},
+    ]
+
+    context = {
+        'paths': paths,
+        'page_title': 'Aloqa ma\'lumotlari'
+    }
+    context.update(get_base_context(request))
+    return render(request, 'judge/contacts/contact.html', context)

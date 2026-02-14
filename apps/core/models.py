@@ -17,3 +17,13 @@ class MyClub(models.Model):
         if self.team:
             return self.team.name
         return "Jamoa tanlanmagan"
+    
+from django.db import models
+
+class Contact(models.Model):
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    def __str__(self):
+        return self.phone

@@ -66,5 +66,7 @@ urlpatterns = [
     path('managements/edit/<int:management_id>', views.judge_managements_edit, name='judge_managements_edit'),
     path('managements/delete/<int:management_id>', views.judge_managements_delete, name='judge_managements_delete'),
 
-    path('club/infos', views.judge_club_infos, name='judge_club_infos')
+    path('club/infos', views.judge_club_infos, name='judge_club_infos'),
+
+    path('contacts', views.judge_contacts, name='judge_contacts'),
 ]
