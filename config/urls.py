@@ -5,7 +5,7 @@ from django.urls import path, include
 from . import errors
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(f"{settings.ADMIN_URL}/", admin.site.urls),
     path('', include('apps.core.urls')),
     path('news/', include('apps.news.urls')),
     path('matches/', include('apps.matches.urls')),
