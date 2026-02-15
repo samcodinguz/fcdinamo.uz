@@ -1630,19 +1630,21 @@ def judge_contacts(request):
     if not request.user.is_superuser:
         raise PermissionDenied
     
+    contact = Contact.objects.all().first()
+    
     if request.method == 'POST':
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         address = request.POST.get('address')
 
-        Contact.objects.create(
-            phone=phone,
-            email=email,
-            address=address
-        )
+        contact.phone = phone
+        contact.email = email
+        contact.address = address
+
+        contact.save()
+        
         messages.success(request, "Aloqa ma'lumotlari muvaffaqiyatli yangilandi")
         return redirect('judge_contacts')
-    
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
@@ -1650,6 +1652,7 @@ def judge_contacts(request):
     ]
 
     context = {
+        'contact': contact,
         'paths': paths,
         'page_title': 'Aloqa ma\'lumotlari'
     }

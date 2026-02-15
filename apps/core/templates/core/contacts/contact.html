@@ -58,26 +58,27 @@
                             <!-- end col-->
 
                             <div class="col-xxl-8">
-                                <form class="py-4 px-1 pe-md-4 border-0 rounded-4">
+                                <form method="post" class="py-4 px-1 pe-md-4 border-0 rounded-4">
+                                    {% csrf_token %}
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label for="name" class="form-label">F.I.SH</label>
-                                            <input type="text" class="form-control py-2" id="name" name="full_name" autocomplete="name" placeholder="To'liq ismingizni kiriting" />
+                                            <input type="text" class="form-control py-2" id="name" name="full_name" autocomplete="name" placeholder="To'liq ismingizni kiriting" oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" required />
                                         </div>
 
                                         <div class="col-md-6">
                                             <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control py-2" id="email" name="email" autocomplete="email" placeholder="Email pochtangizni kiriting" />
+                                            <input type="email" class="form-control py-2" id="email" name="email" autocomplete="email" placeholder="Email pochtangizni kiriting" oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" required />
                                         </div>
 
                                         <div class="col-md-12">
                                             <label for="phone" class="form-label">Telifon</label>
-                                            <input type="text" class="form-control py-2" id="phone" name="phone" placeholder="Telifon raqamingizni kiriting" />
+                                            <input type="text" class="form-control py-2" id="phone" name="phone" placeholder="Telifon raqamingizni kiriting" oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" required />
                                         </div>
 
                                         <div class="col-md-12">
                                             <label for="message" class="form-label">Xabar</label>
-                                            <textarea class="form-control py-2" id="message" rows="5" placeholder="Xabaringizni yozing..."></textarea>
+                                            <textarea class="form-control py-2" id="message" name="message" rows="5" placeholder="Xabaringizni yozing..." oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" required></textarea>
                                         </div>
 
                                         <div class="col-md-12 text-end">

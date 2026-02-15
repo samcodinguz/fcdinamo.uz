@@ -6,7 +6,7 @@ from apps.news.models import News
 from . import utils
 from apps.matches.utils import get_matches
 from apps.leagues.models import Season
-from .models import Contact
+from .models import Contact, Message
 
 def index(request):
 
@@ -32,6 +32,26 @@ def index(request):
 def contacts(request):
 
     contact = Contact.objects.all().first()
+
+    if request.method == 'POST':
+        full_name=request.POST.get('full_name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        message=request.POST.get('message')
+
+        if not full_name or not email or not phone or not message:
+            messages.error(request, "Iltimos barcha maydonlarni to'ldiring")
+            return redirect('contacts')
+        
+        Message.objects.create(
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            message=message
+        )
+
+        messages.success(request, "Sizning xabaringiz yuborildi")
+        return redirect('contacts')
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
