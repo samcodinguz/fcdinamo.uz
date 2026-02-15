@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'apps.standings',
     'apps.judge',
     'apps.club',
-    'apps.media',
 ]
 
 MIDDLEWARE = [

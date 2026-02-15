@@ -12,8 +12,7 @@ from apps.matches.models import Match
 from apps.leagues.models import Season, League, TeamType
 from django.db.models.deletion import ProtectedError
 from apps.core.models import Contact
-from apps.core.models import Message
-from apps.media.models import MediaVideo
+from apps.core.models import Message, Video
 import os
 
 @login_required
@@ -1707,34 +1706,34 @@ def delete_message(request, msg_id):
 
 
 @login_required
-def judge_media(request):
+def judge_galery(request):
     if not request.user.is_superuser:
         raise PermissionDenied
     
     per_page = request.GET.get('per_page', 9)
 
-    vedios = MediaVideo.objects.all().order_by('-created_at')
-    vedios, pagination_range = paginate_queryset(vedios, request, per_page=per_page)
+    videos = Video.objects.all().order_by('-created_at')
+    videos, pagination_range = paginate_queryset(videos, request, per_page=per_page)
     
     
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
-        {'title': 'media', 'url': 'judge_media', 'args': []},
+        {'title': 'media', 'url': 'judge_galery', 'args': []},
     ]
 
     context = {
         'per_page': str(per_page),
         'pagination_range': pagination_range,
-        "vedios": vedios,
+        "videos": videos,
         'paths': paths,
-        'page_title': 'Vedio yuklash'
+        'page_title': 'Video yuklash'
     }
     context.update(get_base_context(request))
-    return render(request, 'judge/media/vedio.html', context)
+    return render(request, 'judge/galery/video.html', context)
 
 
 @login_required
-def judge_vedio_add(request):
+def judge_video_add(request):
     if not request.user.is_superuser:
         raise PermissionDenied
     
@@ -1745,41 +1744,41 @@ def judge_vedio_add(request):
         
         if not title or not link:
             messages.success(request, "Barcha maydonlarni to'ldiring")
-            return redirect('judge_media')
+            return redirect('judge_galery')
         
         link = extract_iframe_src(link)
 
         if not link:
             messages.error(request, "Iltimos, to‘g‘ri iframe kod kiriting")
-            return redirect('judge_media')
+            return redirect('judge_galery')
         
-        MediaVideo.objects.create(
+        Video.objects.create(
             title=title,
             link=link
         )
         messages.success(request, "Video muvaffaqiyatli qo‘shildi")
-        return redirect('judge_media')
+        return redirect('judge_galery')
     
-    return redirect('judge_media')
+    return redirect('judge_galery')
         
 @login_required
-def judge_vedio_delete(request, vedio_id):
+def judge_video_delete(request, video_id):
     if not request.user.is_superuser:
         raise PermissionDenied
     
-    vedio = get_object_or_404(MediaVideo, id=vedio_id)
-    vedio.delete()
-    messages.success(request, "Vedio muvaffaqiyatli o'chirildi")
+    video = get_object_or_404(Video, id=video_id)
+    video.delete()
+    messages.success(request, "Video muvaffaqiyatli o'chirildi")
 
-    return redirect('judge_media')
+    return redirect('judge_galery')
 
 
 @login_required
-def judge_vedio_edit(request, vedio_id):
+def judge_video_edit(request, video_id):
     if not request.user.is_superuser:
         raise PermissionDenied
     
-    vedio = get_object_or_404(MediaVideo, id=vedio_id)
+    video = get_object_or_404(Video, id=video_id)
     if request.method == 'POST':
 
         title = request.POST.get("title").strip()
@@ -1787,19 +1786,17 @@ def judge_vedio_edit(request, vedio_id):
 
         if not title or not link:
             messages.success(request, "Maydonlar bo'sh bo'lmasin")
-            return redirect('judge_media')
-        
-        link = extract_iframe_src(link)
+            return redirect('judge_galery')
 
         if not link:
             messages.error(request, "Iltimos, to‘g‘ri iframe kod kiriting")
-            return redirect('judge_media')
+            return redirect('judge_galery')
         
-        vedio.title = title
-        vedio.link = link
+        video.title = title
+        video.link = link
 
-        vedio.save()
+        video.save()
 
-        messages.success(request, "Vedio muvaffaqiyatli tahrirlandi")
+        messages.success(request, "Video muvaffaqiyatli tahrirlandi")
 
-    return redirect('judge_media')
+    return redirect('judge_galery')

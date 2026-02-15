@@ -2,39 +2,39 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        {% for vedio in vedios %}
+        {% for video in videos %}
         <div class="col-xl-4 col-md-6">
             <div class="card rounded-0">
                 <div class="card-body content p-0">
-                    <iframe width="560" height="315" src="{{ vedio.link }}" title="{{ vedio.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="{{ video.link }}" title="{{ video.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <div>
-                        <button type="button" class="btn btn-default btn-icon btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ vedio.title }}" data-bs-original-title="Vedio sarlavhasi"><i class="ti ti-eye fs-lg"></i></button>
+                        <button type="button" class="btn btn-default btn-icon btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ video.title }}" data-bs-original-title="Video sarlavhasi"><i class="ti ti-eye fs-lg"></i></button>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
-        {% if vedios %}
+        {% if videos %}
         <div class="d-flex justify-content-between align-items-center my-3">
             <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
-                <li class="page-item {% if not vedios.has_previous %}disabled{% endif %}">
-                    <a class="page-link" href="{% if vedios.has_previous %}?page={{ vedios.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
+                    <a class="page-link" href="{% if videos.has_previous %}?page={{ videos.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {% for page in pagination_range %}
                 {% if page == '...' %}
                 <li class="page-item disabled"><span class="page-link">...</span></li>
-                {% elif page == vedios.number %}
+                {% elif page == videos.number %}
                 <li class="page-item active"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
                 {% else %}
                 <li class="page-item"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
                 {% endif %}
                 {% endfor %}
-                <li class="page-item {% if not vedios.has_next %}disabled{% endif %}">
-                    <a class="page-link" href="{% if vedios.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ vedios.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                <li class="page-item {% if not videos.has_next %}disabled{% endif %}">
+                    <a class="page-link" href="{% if videos.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ videos.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

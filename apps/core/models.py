@@ -41,3 +41,12 @@ class Message(models.Model):
     def __str__(self):
         status = "O‘qilgan" if self.is_read else "Yangi"
         return f"{self.full_name} - {status}"
+
+class Video(models.Model):
+    title = models.CharField(max_length=255)
+    link = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title

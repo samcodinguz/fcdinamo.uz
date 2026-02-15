@@ -21,9 +21,9 @@
                             </div>
                             <div class="col-auto">
                                 <div class="d-flex align-items-center">
-                                    <a href="#!" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVedioModal">
+                                    <a href="#!" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVideoModal">
                                         <i class="ti ti-plus me-1 fs-sm"></i>
-                                        Vedio yuklash
+                                        Video yuklash
                                     </a>
                                 </div>
                             </div>
@@ -34,47 +34,47 @@
         </div>
     </div>
     <div class="row">
-        {% for vedio in vedios %}
+        {% for video in videos %}
         <div class="col-xl-4 col-md-6">
             <div class="card rounded-0">
                 <div class="card-body content p-0">
-                    <iframe width="560" height="315" src="{{ vedio.link }}" title="{{ vedio.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="{{ video.link }}" title="{{ video.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <div>
-                        <a href="{% url 'judge_vedio_edit' vedio.id %}" class="btn btn-default btn-icon btn-sm edit-vedio-btn" data-bs-toggle="modal" data-bs-target="#editVedioModal" data-title="{{ vedio.title }}" data-link="{{ vedio.link }}">
+                        <a href="{% url 'judge_video_edit' video.id %}" class="btn btn-default btn-icon btn-sm edit-video-btn" data-bs-toggle="modal" data-bs-target="#editVideoModal" data-title="{{ video.title }}" data-link="{{ video.link }}">
                             <i class="ti ti-edit fs-lg"></i>
                         </a>
-                        <a href="{% url 'judge_vedio_delete' vedio.id %}" class="btn btn-default btn-icon btn-sm single-delete-btn">
+                        <a href="{% url 'judge_video_delete' video.id %}" class="btn btn-default btn-icon btn-sm single-delete-btn">
                             <i class="ti ti-trash fs-lg"></i>
                         </a>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-default btn-icon btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ vedio.title }}" data-bs-original-title="Vedio sarlavhasi"><i class="ti ti-eye fs-lg"></i></button>
+                        <button type="button" class="btn btn-default btn-icon btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ video.title }}" data-bs-original-title="Video sarlavhasi"><i class="ti ti-eye fs-lg"></i></button>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
-        {% if vedios %}
+        {% if videos %}
         <div class="d-flex justify-content-between align-items-center my-3">
             <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
-                <li class="page-item {% if not vedios.has_previous %}disabled{% endif %}">
-                    <a class="page-link" href="{% if vedios.has_previous %}?page={{ vedios.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
+                    <a class="page-link" href="{% if videos.has_previous %}?page={{ videos.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {% for page in pagination_range %}
                 {% if page == '...' %}
                 <li class="page-item disabled"><span class="page-link">...</span></li>
-                {% elif page == vedios.number %}
+                {% elif page == videos.number %}
                 <li class="page-item active"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
                 {% else %}
                 <li class="page-item"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
                 {% endif %}
                 {% endfor %}
-                <li class="page-item {% if not vedios.has_next %}disabled{% endif %}">
-                    <a class="page-link" href="{% if vedios.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ vedios.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                <li class="page-item {% if not videos.has_next %}disabled{% endif %}">
+                    <a class="page-link" href="{% if videos.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ videos.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -82,36 +82,36 @@
         </div>
         {% endif %}
     </div>
-    <!-- Add New Vedio Modal -->
-    <div class="modal fade" id="addVedioModal" tabindex="-1" aria-labelledby="addVedioModalLabel" aria-hidden="true">
+    <!-- Add New video Modal -->
+    <div class="modal fade" id="addVideoModal" tabindex="-1" aria-labelledby="addVideoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addVedioModalLabel">Yangi vedio qo'shish</h5>
+                    <h5 class="modal-title" id="addVideoModalLabel">Yangi video qo'shish</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form method="post" action="{% url 'judge_vedio_add' %}">
+                <form method="post" action="{% url 'judge_video_add' %}">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row g-3">
-                            <!-- Vedio Name -->
+                            <!-- video Name -->
                             <div class="col-12">
-                                <label class="form-label">Vedio nomi <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="title" placeholder="Vedio nomini kiriting" required />
+                                <label class="form-label">Video nomi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="title" placeholder="Video nomini kiriting" required />
                             </div>
 
-                            <!-- Vedio Link Youtube -->
+                            <!-- video Link Youtube -->
                             <div class="col-12">
-                                <label class="form-label">Vedio linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="link" placeholder="Vedio youtube linkini kiriting" required />
+                                <label class="form-label">Video linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="link" placeholder="Video youtube linkini kiriting" required />
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
-                        <button type="submit" class="btn btn-primary">Vedio qo'shish</button>
+                        <button type="submit" class="btn btn-primary">Video qo'shish</button>
                     </div>
                 </form>
             </div>
@@ -119,29 +119,29 @@
     </div>
     <!-- end modal-->
     
-    <!-- Edit Vedio Modal -->
-    <div class="modal fade" id="editVedioModal" tabindex="-1" aria-labelledby="editVedioModalLabel" aria-hidden="true">
+    <!-- Edit video Modal -->
+    <div class="modal fade" id="editVideoModal" tabindex="-1" aria-labelledby="editVideoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editVedioModalLabel">Vedioni tahirilash</h5>
+                    <h5 class="modal-title" id="editVideoModalLabel">Videoni tahirilash</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form method="post" id="editVedioForm">
+                <form method="post" id="editVideoForm">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row g-3">
-                            <!-- Vedio Name -->
+                            <!-- video Name -->
                             <div class="col-12">
-                                <label class="form-label">Vedio nomi <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="title" id="editTitle" placeholder="Vedio nomini kiriting" required />
+                                <label class="form-label">Video nomi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="title" id="editTitle" placeholder="Video nomini kiriting" required />
                             </div>
 
-                            <!-- Vedio Link Youtube -->
+                            <!-- video Link Youtube -->
                             <div class="col-12">
-                                <label class="form-label">Vedio linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="link" id="editLink" placeholder="Vedio youtube linkini kiriting" required />
+                                <label class="form-label">Video linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="link" id="editLink" placeholder="Video youtube linkini kiriting" required />
                             </div>
                         </div>
                     </div>
@@ -183,8 +183,8 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const editButtons = document.querySelectorAll(".edit-vedio-btn");
-        const form = document.getElementById("editVedioForm");
+        const editButtons = document.querySelectorAll(".edit-video-btn");
+        const form = document.getElementById("editVideoForm");
         const title = document.getElementById("editTitle");
         const link = document.getElementById("editLink");
         editButtons.forEach(btn => {

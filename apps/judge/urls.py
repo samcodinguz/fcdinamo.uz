@@ -72,8 +72,8 @@ urlpatterns = [
 
     path('message/read/', views.mark_message_read, name='mark_message_read'),
     path('message/delete/<int:msg_id>', views.delete_message, name='delete_message'),
-    path('media', views.judge_media, name='judge_media'),
-    path('media/vedio/add', views.judge_vedio_add, name='judge_vedio_add'),
-    path('media/vedio/delete/<int:vedio_id>', views.judge_vedio_delete, name='judge_vedio_delete'),
-    path('media/vedio/edit/<int:vedio_id>', views.judge_vedio_edit, name='judge_vedio_edit'),
+    path('', views.judge_galery, name='judge_galery'),
+    path('video/add', views.judge_video_add, name='judge_video_add'),
+    path('video/delete/<int:video_id>', views.judge_video_delete, name='judge_video_delete'),
+    path('video/edit/<int:video_id>', views.judge_video_edit, name='judge_video_edit'),
 ]
