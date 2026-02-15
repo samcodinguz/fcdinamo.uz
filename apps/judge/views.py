@@ -1730,7 +1730,7 @@ def judge_media(request):
         'page_title': 'Vedio yuklash'
     }
     context.update(get_base_context(request))
-    return render(request, 'judge/mdd/mdd.html', context)
+    return render(request, 'judge/media/vedio.html', context)
 
 
 @login_required

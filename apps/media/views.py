@@ -20,4 +20,4 @@ def media_vedio(request):
         'paths': paths
     }
     context.update(get_base_context(request))
-    return render(request, 'mdd/vdd.html', context)
+    return render(request, 'media/vedio.html', context)
