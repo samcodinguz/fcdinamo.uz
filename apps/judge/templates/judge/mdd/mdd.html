@@ -1,0 +1,200 @@
+{% extends "judge/judge.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <form class="bg-light-subtle rounded border p-3">
+                <div class="row gap-3">
+                    <div class="col">
+                        <div class="row gap-3 justify-content-between">
+                            <div class="col-auto d-flex align-items-center">
+                                <span class="me-2 fw-semibold">Filter:</span>
+                                <form method="get">
+                                    <select class="form-select form-control my-1 my-md-0" name="per_page" onchange="this.form.submit()">
+                                        <option value="3" {% if per_page == "3" %}selected{% endif %}>3</option>
+                                        <option value="6" {% if per_page == "6" %}selected{% endif %}>6</option>
+                                        <option value="9" {% if per_page == "9" %}selected{% endif %}>9</option>
+                                        <option value="12" {% if per_page == "12" %}selected{% endif %}>12</option>
+                                        <option value="15" {% if per_page == "15" %}selected{% endif %}>15</option>
+                                    </select>
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <a href="#!" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVedioModal">
+                                        <i class="ti ti-plus me-1 fs-sm"></i>
+                                        Vedio yuklash
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        {% for vedio in vedios %}
+        <div class="col-xl-4 col-md-6">
+            <div class="card rounded-0">
+                <div class="card-body content p-0">
+                    <iframe width="560" height="315" src="{{ vedio.link }}" title="{{ vedio.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        <a href="{% url 'judge_vedio_edit' vedio.id %}" class="btn btn-default btn-icon btn-sm edit-vedio-btn" data-bs-toggle="modal" data-bs-target="#editVedioModal" data-title="{{ vedio.title }}" data-link="{{ vedio.link }}">
+                            <i class="ti ti-edit fs-lg"></i>
+                        </a>
+                        <a href="{% url 'judge_vedio_delete' vedio.id %}" class="btn btn-default btn-icon btn-sm single-delete-btn">
+                            <i class="ti ti-trash fs-lg"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-default btn-icon btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ vedio.title }}" data-bs-original-title="Vedio sarlavhasi"><i class="ti ti-eye fs-lg"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if vedios %}
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <ul class="pagination pagination-sm pagination-boxed mb-0 mx-auto">
+                <li class="page-item {% if not vedios.has_previous %}disabled{% endif %}">
+                    <a class="page-link" href="{% if vedios.has_previous %}?page={{ vedios.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% for page in pagination_range %}
+                {% if page == '...' %}
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% elif page == vedios.number %}
+                <li class="page-item active"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+                {% endfor %}
+                <li class="page-item {% if not vedios.has_next %}disabled{% endif %}">
+                    <a class="page-link" href="{% if vedios.has_next %}?{% if per_page %}per_page={{ per_page }}&{% endif %}page={{ vedios.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Add New Vedio Modal -->
+    <div class="modal fade" id="addVedioModal" tabindex="-1" aria-labelledby="addVedioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addVedioModalLabel">Yangi vedio qo'shish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="post" action="{% url 'judge_vedio_add' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- Vedio Name -->
+                            <div class="col-12">
+                                <label class="form-label">Vedio nomi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="title" placeholder="Vedio nomini kiriting" required />
+                            </div>
+
+                            <!-- Vedio Link Youtube -->
+                            <div class="col-12">
+                                <label class="form-label">Vedio linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="link" placeholder="Vedio youtube linkini kiriting" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
+                        <button type="submit" class="btn btn-primary">Vedio qo'shish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-->
+    
+    <!-- Edit Vedio Modal -->
+    <div class="modal fade" id="editVedioModal" tabindex="-1" aria-labelledby="editVedioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVedioModalLabel">Vedioni tahirilash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="post" id="editVedioForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- Vedio Name -->
+                            <div class="col-12">
+                                <label class="form-label">Vedio nomi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="title" id="editTitle" placeholder="Vedio nomini kiriting" required />
+                            </div>
+
+                            <!-- Vedio Link Youtube -->
+                            <div class="col-12">
+                                <label class="form-label">Vedio linki <span class="text-muted">(YouTube link)</span> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="link" id="editLink" placeholder="Vedio youtube linkini kiriting" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Yo'q</button>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-->
+</div>
+{% endblock content %} {% block js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const contents = document.querySelectorAll(".content");
+
+    contents.forEach((content) => {
+        const iframes = content.querySelectorAll("iframe");
+
+        iframes.forEach((iframe) => {
+            if (!iframe.closest(".ratio")) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "ratio ratio-16x9 overflow-hidden";
+
+                iframe.parentNode.insertBefore(wrapper, iframe);
+                wrapper.appendChild(iframe);
+
+                iframe.removeAttribute("width");
+                iframe.removeAttribute("height");
+                iframe.style.width = "100%";
+                iframe.style.height = "100%";
+            }
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButtons = document.querySelectorAll(".edit-vedio-btn");
+        const form = document.getElementById("editVedioForm");
+        const title = document.getElementById("editTitle");
+        const link = document.getElementById("editLink");
+        editButtons.forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                form.action = this.href;
+                title.value = this.dataset.title;
+                link.value = this.dataset.link;
+            });
+        });
+    });
+</script>
+{% endblock js %}
