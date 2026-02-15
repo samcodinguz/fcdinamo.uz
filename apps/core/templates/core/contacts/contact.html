@@ -63,7 +63,7 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label for="name" class="form-label">F.I.SH</label>
-                                            <input type="text" class="form-control py-2" id="name" name="full_name" autocomplete="name" placeholder="To'liq ismingizni kiriting" oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" required />
+                                            <input type="text" class="form-control py-2" id="name" name="full_name" autocomplete="name" placeholder="To'liq ismingizni kiriting" oninvalid="this.setCustomValidity('Maydon bo‘sh qolmasin')" oninput="this.setCustomValidity('')" {% if request.user.first_name or request.user.last_name %}value="{{ request.user.first_name }} {{ request.user.last_name }}"{% endif %} required />
                                         </div>
 
                                         <div class="col-md-6">

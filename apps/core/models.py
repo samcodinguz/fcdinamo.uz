@@ -35,7 +35,9 @@ class Message(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=30)
     message = models.TextField()
+    is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.full_name} - {self.email}"
+        status = "O‘qilgan" if self.is_read else "Yangi"
+        return f"{self.full_name} - {status}"

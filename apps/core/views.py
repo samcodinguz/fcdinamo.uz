@@ -7,6 +7,8 @@ from . import utils
 from apps.matches.utils import get_matches
 from apps.leagues.models import Season
 from .models import Contact, Message
+from django.utils import timezone
+from datetime import timedelta
 
 def index(request):
 
@@ -34,20 +36,39 @@ def contacts(request):
     contact = Contact.objects.all().first()
 
     if request.method == 'POST':
+
+        if not request.user.is_authenticated:
+            messages.error(request, "Xabar yozish uchun tizimga kiring yoki ro'yxatdan o'ting")
+            return redirect('contacts')
+        
         full_name=request.POST.get('full_name')
         email=request.POST.get('email')
         phone=request.POST.get('phone')
         message=request.POST.get('message')
 
-        if not full_name or not email or not phone or not message:
+        if not all([full_name, email, phone, message]):
             messages.error(request, "Iltimos barcha maydonlarni to'ldiring")
             return redirect('contacts')
+        
+        last_message = Message.objects.filter(
+            user=request.user
+        ).order_by('-created_at').first()
+
+        if last_message:
+            time_diff = timezone.now() - last_message.created_at
+            if time_diff < timedelta(hours=24):
+                remaining_time = timedelta(hours=24) - time_diff
+                hours = remaining_time.seconds // 3600
+
+                messages.error(request, f"Siz xabarni faqat {hours} soatdan keyin qayta yubora olasiz")
+                return redirect('contacts')
         
         Message.objects.create(
             full_name=full_name,
             email=email,
             phone=phone,
-            message=message
+            message=message,
+            user=request.user
         )
 
         messages.success(request, "Sizning xabaringiz yuborildi")

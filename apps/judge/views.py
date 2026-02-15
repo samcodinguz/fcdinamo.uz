@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from apps.core.utils import get_base_context
+from .utils import get_base_context
 from apps.news.models import News, NewsTag
 from apps.core.utils import paginate_queryset
 from apps.core.models import MyClub
@@ -12,6 +12,7 @@ from apps.matches.models import Match
 from apps.leagues.models import Season, League, TeamType
 from django.db.models.deletion import ProtectedError
 from apps.core.models import Contact
+from apps.core.models import Message
 import os
 
 @login_required
@@ -19,6 +20,8 @@ def judge(request):
 
     if not request.user.is_superuser:
         raise PermissionDenied
+    
+    msgs = list(Message.objects.select_related('user').order_by('-created_at'))
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
@@ -26,9 +29,15 @@ def judge(request):
 
     context = {
         'paths': paths,
-        'page_title': 'Admin sahifasi'
+        'page_title': 'Admin xabarlari',
+        'msgs': msgs
     }
     context.update(get_base_context(request))
+    last_msg = Message.objects.select_related('user').order_by('-created_at').first()
+
+    if last_msg and not last_msg.is_read:
+        last_msg.is_read = True
+        last_msg.save(update_fields=['is_read'])
     return render(request, 'judge/judge.html', context)
 
 @login_required
@@ -1658,3 +1667,64 @@ def judge_contacts(request):
     }
     context.update(get_base_context(request))
     return render(request, 'judge/contacts/contact.html', context)
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+@login_required
+@login_required
+def mark_message_read(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    msg_id = request.POST.get('msg_id')
+    msg = get_object_or_404(Message, id=msg_id)
+
+    if not msg.is_read:
+        msg.is_read = True
+        msg.save(update_fields=['is_read'])
+
+    return JsonResponse({'status': 'ok'})
+        
+
+@login_required
+def delete_message(request, msg_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    if request.method == 'POST':
+        msg = get_object_or_404(Message, id=msg_id)
+        msg.delete()
+        return redirect('judge')
+    return redirect('judge')
+    
+
+from django.core.mail import send_mail
+from django.conf import settings
+@login_required
+def reply_message(request, msg_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    msg = get_object_or_404(Message, id=msg_id)
+
+    if request.method == 'POST':
+        reply_text = request.POST.get('reply_text')
+
+        if not reply_text:
+            messages.error(request, "Javob matni bo‘sh bo‘lishi mumkin emas")
+            return redirect('judge')
+
+        send_mail(
+            subject="Siz yuborgan xabarga javob",
+            message=reply_text,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[msg.email.strip()],
+            fail_silently=False,
+        )
+
+        messages.success(request, "Javob email orqali yuborildi")
+        return redirect('judge')
+
+    return redirect('judge')

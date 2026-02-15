@@ -29,13 +29,108 @@
         <!-- Start Main Content -->
         <div class="content-page">
             <div class="container-fluid">
-                <div class="page-title-head d-flex align-items-center justify-content-end">
-                    {% include 'core/components/breadcrumb.html' %}
+                <div class="page-title-head d-flex align-items-center">
+                    {% include 'judge/components/breadcrumb.html' %}
                 </div>
             </div>
             {% block content %}
-            <div class="container">
+            <div class="container-fluid">
+                {% if msgs %}
+                <div class="outlook-box gap-1">
+                    <div class="offcanvas-lg offcanvas-start outlook-left-menu" tabindex="-1" id="outlookSidebaroffcanvas" aria-labelledby="outlookSidebaroffcanvasLabel">
+                        <div class="card h-100 mb-0 rounded-0 border-0" data-simplebar>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush outlook-list mb-0" role="tablist">
+                                    {% for msg in msgs %}
+                                    <li class="list-group-item {% if not msg.is_read %}bg-primary-subtle{% endif %} p-0" role="presentation">
+                                        <a href="#msg-{{ msg.id }}" class="nav-link p-3 {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" role="tab" data-msg-id="{{ msg.id }}" aria-controls="msg-{{ msg.id }}" aria-selected="true">
+                                            <span class="d-flex justify-content-between align-items-center mb-1">
+                                                <span class="ff-secondary fw-semibold">{{ msg.full_name }}</span>
+                                                <small class="float-end text-muted">{{ msg.created_at|date:"d-m-Y"}}</small>
+                                            </span>
 
+                                            <span class="mb-2 d-block fs-xs text-muted">{{ msg.message|truncatewords:11 }}</span>
+
+                                            <span class="d-flex align-items-center flex-wrap justify-content-between">
+                                                <span>
+                                                    Xabar xolati
+                                                </span>
+                                                {% if msg.is_read %}
+                                                <span class="badge text-bg-primary badge-label">O'qilgan</span>
+                                                {% else %}
+                                                <span class="badge text-bg-danger badge-label">Yangi</span>
+                                                {% endif %}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- end card-body-->
+                        </div>
+                        <!-- end card-->
+                    </div>
+
+                    <div class="card h-100 mb-0 rounded-0 border-0 flex-grow-1" data-simplebar data-simplebar-md>
+                        <div class="card-header d-lg-none d-flex">
+                            <button class="btn btn-sm btn-default btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#outlookSidebaroffcanvas" aria-controls="outlookSidebaroffcanvas">
+                                <i class="ti ti-menu-4 fs-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="tab-content">
+                                {% for msg in msgs %}
+                                <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="msg-{{ msg.id }}" role="tabpanel">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <div class="text-muted mb-2">
+                                                <i class="ti ti-clock"></i>
+                                                {{ msg.created_at|date:"d-m-Y H:i" }}
+                                            </div>
+
+                                            <h2 class="fs-xl mb-3">{{ msg.full_name }}</h2>
+                                        </div>
+                                        <div>
+                                            <form method="post" action="{% url 'delete_message' msg.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button class="btn btn-icon btn-default btn-sm"
+                                                        onclick="return confirm('Xabarni o‘chirishni xohlaysizmi?')">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <p>{{ msg.message }}</p>
+
+                                    <p>
+                                        <strong>Email:</strong> <span class="fst-italic">{{ msg.email }}</span>
+                                        <br />
+                                        <strong>Tel raqam:</strong> <span class="fst-italic">{{ msg.phone }}</span>
+                                    </p>
+
+                                    <form method="post" action="{% url 'reply_message' msg.id %}" class="my-3">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <textarea class="form-control" id="form-control-textarea" rows="4" name="reply_text" placeholder="Javobingizni yozing..."></textarea>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary">
+                                                Javobni yuborish
+                                                <i class="ti ti-send-2 align-baseline ms-1"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- end card-body-->
+                    </div>
+                    <!-- end card-->
+                </div>
+                {% endif %}
             </div>
             {% endblock content %}
             {% include 'judge/components/footer.html' %}
@@ -46,6 +141,33 @@
     <script src="{% static 'js/vendors.min.js' %}"></script>
     <!-- App js -->
     <script src="{% static 'js/app.js' %}"></script>
+    <script>
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (e) {
+                const msgId = this.getAttribute('data-msg-id');
+
+                fetch("{% url 'mark_message_read' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `msg_id=${msgId}`
+                }).then(response => {
+                    if (response.ok) {
+                        // badge'ni yangilash (frontend UX)
+                        const badge = this.querySelector('.badge');
+                        if (badge) {
+                            badge.classList.remove('text-bg-danger');
+                            badge.classList.add('text-bg-primary');
+                            badge.textContent = "O‘qilgan";
+                        }
+                    }
+                });
+            });
+        });
+        </script>
+
     {% block js %}{% endblock js %}
 </body>
 </html>

@@ -63,6 +63,7 @@
                             <span class="align-middle">System</span>
                         </label>
                     </div>
+                    
                     <!-- end dropdown-menu-->
                 </div>
                 <!-- end dropdown-->
@@ -80,8 +81,18 @@
                     <i class="ti ti-palette topbar-link-icon"></i>
                 </button>
             </div>
+            <div class="topbar-item">
+                <a href="{% url 'judge' %}" class="topbar-link">
+                    <div class="topbar-link-icon d-flex align-items-center justify-content-center">
+                        <i class="ti ti-message"></i>
+                    </div>
+                    <span class="badge text-bg-danger badge-circle topbar-badge">{% if unread_messages %}{{ unread_messages }}{% endif %}</span>
+                </a>
+                <!-- end dropdown-->
+            </div>
 
             {% include 'core/components/user-dropdown.html' %}
         </div>
+        
     </div>
 </header>

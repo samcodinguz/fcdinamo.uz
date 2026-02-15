@@ -69,4 +69,8 @@ urlpatterns = [
     path('club/infos', views.judge_club_infos, name='judge_club_infos'),
 
     path('contacts', views.judge_contacts, name='judge_contacts'),
+
+    path('judge/message/read/', views.mark_message_read, name='mark_message_read'),
+    path('judge/message/delete/<int:msg_id>', views.delete_message, name='delete_message'),
+    path('judge/message/reply/<int:msg_id>/', views.reply_message, name='reply_message'),
 ]
