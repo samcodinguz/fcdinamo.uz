@@ -11,7 +11,7 @@ venv/
 
 # Django
 db.sqlite3
-media/
+mediass/
 staticfiles/
 
 # OS
