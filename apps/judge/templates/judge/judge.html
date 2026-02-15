@@ -109,19 +109,6 @@
                                         <br />
                                         <strong>Tel raqam:</strong> <span class="fst-italic">{{ msg.phone }}</span>
                                     </p>
-
-                                    <form method="post" action="{% url 'reply_message' msg.id %}" class="my-3">
-                                        {% csrf_token %}
-                                        <div class="mb-3">
-                                            <textarea class="form-control" id="form-control-textarea" rows="4" name="reply_text" placeholder="Javobingizni yozing..."></textarea>
-                                        </div>
-                                        <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">
-                                                Javobni yuborish
-                                                <i class="ti ti-send-2 align-baseline ms-1"></i>
-                                            </button>
-                                        </div>
-                                    </form>
                                 </div>
                                 {% endfor %}
                             </div>

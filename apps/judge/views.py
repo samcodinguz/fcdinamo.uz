@@ -1699,32 +1699,3 @@ def delete_message(request, msg_id):
         return redirect('judge')
     return redirect('judge')
     
-
-from django.core.mail import send_mail
-from django.conf import settings
-@login_required
-def reply_message(request, msg_id):
-    if not request.user.is_superuser:
-        raise PermissionDenied
-
-    msg = get_object_or_404(Message, id=msg_id)
-
-    if request.method == 'POST':
-        reply_text = request.POST.get('reply_text')
-
-        if not reply_text:
-            messages.error(request, "Javob matni bo‘sh bo‘lishi mumkin emas")
-            return redirect('judge')
-
-        send_mail(
-            subject="Siz yuborgan xabarga javob",
-            message=reply_text,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[msg.email.strip()],
-            fail_silently=False,
-        )
-
-        messages.success(request, "Javob email orqali yuborildi")
-        return redirect('judge')
-
-    return redirect('judge')
