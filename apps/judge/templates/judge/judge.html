@@ -43,7 +43,7 @@
                                 <ul class="list-group list-group-flush outlook-list mb-0" role="tablist">
                                     {% for msg in msgs %}
                                     <li class="list-group-item {% if not msg.is_read %}bg-primary-subtle{% endif %} p-0" role="presentation">
-                                        <a href="#msg-{{ msg.id }}" class="nav-link p-3 {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" role="tab" data-msg-id="{{ msg.id }}" aria-controls="msg-{{ msg.id }}" aria-selected="true">
+                                        <a href="#msg-{{ msg.id }}" class="nav-link p-3 {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" role="tab" data-msg-id="{{ msg.id }}" aria-controls="msg-{{ msg.id }}" {% if forloop.first %}aria-selected="true"{% else %}aria-selected="false"{% endif %}>
                                             <span class="d-flex justify-content-between align-items-center mb-1">
                                                 <span class="ff-secondary fw-semibold">{{ msg.full_name }}</span>
                                                 <small class="float-end text-muted">{{ msg.created_at|date:"d-m-Y"}}</small>
@@ -89,7 +89,7 @@
                                                 {{ msg.created_at|date:"d-m-Y H:i" }}
                                             </div>
 
-                                            <h2 class="fs-xl mb-3">{{ msg.full_name }}</h2>
+                                            <h2 class="fs-xxl mb-3">{{ msg.full_name }}</h2>
                                         </div>
                                         <div>
                                             <form method="post" action="{% url 'delete_message' msg.id %}" class="d-inline">
@@ -102,9 +102,9 @@
                                         </div>
                                     </div>
 
-                                    <p>{{ msg.message }}</p>
-
-                                    <p>
+                                    <p class="fs-lg">{{ msg.message }}</p>
+                                    <hr>
+                                    <p class="fs-lg">
                                         <strong>Email:</strong> <span class="fst-italic">{{ msg.email }}</span>
                                         <br />
                                         <strong>Tel raqam:</strong> <span class="fst-italic">{{ msg.phone }}</span>

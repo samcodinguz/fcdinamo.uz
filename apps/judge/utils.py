@@ -1,6 +1,11 @@
 from datetime import datetime
 from apps.leagues.models import TeamType
 from apps.core.models import Message
+import re
+
+def extract_iframe_src(text: str) -> str | None:
+    match = re.search(r'src=["\'](https://[^"\']+)["\']', text)
+    return match.group(1) if match else None
 
 def get_base_context(request):
     unread_messages = 0

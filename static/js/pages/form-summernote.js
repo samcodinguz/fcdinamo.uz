@@ -1,7 +1,7 @@
 void 0 !== jQuery.fn.summernote &&
   $(document).ready(function () {
     $(".summernote").summernote({
-      height: 350,
+      height: 300,
       toolbar: [
         ["style", ["style"]],
         [

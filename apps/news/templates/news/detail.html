@@ -129,26 +129,27 @@
 </div>
 {% endblock content %} {% block js %} 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const content = document.querySelector(".content");
+document.addEventListener("DOMContentLoaded", function () {
+    const contents = document.querySelectorAll(".content");
 
-    if (!content) return;
+    contents.forEach((content) => {
+        const iframes = content.querySelectorAll("iframe");
 
-    const iframes = content.querySelectorAll("iframe");
+        iframes.forEach((iframe) => {
+            if (!iframe.closest(".ratio")) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "ratio ratio-16x9 overflow-hidden";
 
-    iframes.forEach((iframe) => {
-        if (!iframe.closest(".ratio")) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "ratio ratio-16x9 overflow-hidden my-3 ";
+                iframe.parentNode.insertBefore(wrapper, iframe);
+                wrapper.appendChild(iframe);
 
-        iframe.parentNode.insertBefore(wrapper, iframe);
-        wrapper.appendChild(iframe);
-        iframe.removeAttribute("width");
-        iframe.removeAttribute("height");
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        }
+                iframe.removeAttribute("width");
+                iframe.removeAttribute("height");
+                iframe.style.width = "100%";
+                iframe.style.height = "100%";
+            }
+        });
     });
-    });
+});
 </script>
 {% endblock js %}

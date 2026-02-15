@@ -70,6 +70,10 @@ urlpatterns = [
 
     path('contacts', views.judge_contacts, name='judge_contacts'),
 
-    path('judge/message/read/', views.mark_message_read, name='mark_message_read'),
-    path('judge/message/delete/<int:msg_id>', views.delete_message, name='delete_message'),
+    path('message/read/', views.mark_message_read, name='mark_message_read'),
+    path('message/delete/<int:msg_id>', views.delete_message, name='delete_message'),
+    path('media', views.judge_media, name='judge_media'),
+    path('media/vedio/add', views.judge_vedio_add, name='judge_vedio_add'),
+    path('media/vedio/delete/<int:vedio_id>', views.judge_vedio_delete, name='judge_vedio_delete'),
+    path('media/vedio/edit/<int:vedio_id>', views.judge_vedio_edit, name='judge_vedio_edit'),
 ]

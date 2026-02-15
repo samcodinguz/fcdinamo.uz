@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .utils import get_base_context
+from .utils import get_base_context, extract_iframe_src
 from apps.news.models import News, NewsTag
 from apps.core.utils import paginate_queryset
 from apps.core.models import MyClub
@@ -13,6 +13,7 @@ from apps.leagues.models import Season, League, TeamType
 from django.db.models.deletion import ProtectedError
 from apps.core.models import Contact
 from apps.core.models import Message
+from apps.media.models import MediaVideo
 import os
 
 @login_required
@@ -20,6 +21,20 @@ def judge(request):
 
     if not request.user.is_superuser:
         raise PermissionDenied
+    
+    MAX_MESSAGES = 20
+
+    total = Message.objects.count()
+    excess = total - MAX_MESSAGES
+
+    if excess > 0:
+        old_ids = (
+            Message.objects
+            .order_by('created_at')
+            .values_list('id', flat=True)[:excess]
+        )
+
+        Message.objects.filter(id__in=old_ids).delete()
     
     msgs = list(Message.objects.select_related('user').order_by('-created_at'))
 
@@ -1618,6 +1633,7 @@ def judge_club_infos(request):
         messages.success(request, "Klub ma'lumotlar muvaffaqiyatli yangilandi")
         return redirect('judge_club_infos')
 
+    contact = Contact.objects.all().first()
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
@@ -1627,6 +1643,7 @@ def judge_club_infos(request):
 
     context = {
         'club': club,
+        'contact': contact,
         'paths': paths,
         'page_title': 'Klub ma\'lumotlari'
     }
@@ -1653,26 +1670,14 @@ def judge_contacts(request):
         contact.save()
         
         messages.success(request, "Aloqa ma'lumotlari muvaffaqiyatli yangilandi")
-        return redirect('judge_contacts')
-
-    paths = [
-        {'title': 'judge', 'url': 'judge', 'args': []},
-        {'title': 'contacts', 'url': 'judge_contacts', 'args': []},
-    ]
-
-    context = {
-        'contact': contact,
-        'paths': paths,
-        'page_title': 'Aloqa ma\'lumotlari'
-    }
-    context.update(get_base_context(request))
-    return render(request, 'judge/contacts/contact.html', context)
+        return redirect('judge_club_infos')
+    return redirect('judge_club_infos')
 
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-@login_required
+@require_POST
 @login_required
 def mark_message_read(request):
     if not request.user.is_superuser:
@@ -1699,3 +1704,102 @@ def delete_message(request, msg_id):
         return redirect('judge')
     return redirect('judge')
     
+
+
+@login_required
+def judge_media(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    per_page = request.GET.get('per_page', 9)
+
+    vedios = MediaVideo.objects.all().order_by('-created_at')
+    vedios, pagination_range = paginate_queryset(vedios, request, per_page=per_page)
+    
+    
+    paths = [
+        {'title': 'judge', 'url': 'judge', 'args': []},
+        {'title': 'media', 'url': 'judge_media', 'args': []},
+    ]
+
+    context = {
+        'per_page': str(per_page),
+        'pagination_range': pagination_range,
+        "vedios": vedios,
+        'paths': paths,
+        'page_title': 'Vedio yuklash'
+    }
+    context.update(get_base_context(request))
+    return render(request, 'judge/media/media.html', context)
+
+
+@login_required
+def judge_vedio_add(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    if request.method == 'POST':
+        
+        title = request.POST.get("title").strip()
+        link = request.POST.get("link").strip()
+        
+        if not title or not link:
+            messages.success(request, "Barcha maydonlarni to'ldiring")
+            return redirect('judge_media')
+        
+        link = extract_iframe_src(link)
+
+        if not link:
+            messages.error(request, "Iltimos, to‘g‘ri iframe kod kiriting")
+            return redirect('judge_media')
+        
+        MediaVideo.objects.create(
+            title=title,
+            link=link
+        )
+        messages.success(request, "Video muvaffaqiyatli qo‘shildi")
+        return redirect('judge_media')
+    
+    return redirect('judge_media')
+        
+@login_required
+def judge_vedio_delete(request, vedio_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    vedio = get_object_or_404(MediaVideo, id=vedio_id)
+    vedio.delete()
+    messages.success(request, "Vedio muvaffaqiyatli o'chirildi")
+
+    return redirect('judge_media')
+
+
+@login_required
+def judge_vedio_edit(request, vedio_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    vedio = get_object_or_404(MediaVideo, id=vedio_id)
+    if request.method == 'POST':
+
+        title = request.POST.get("title").strip()
+        link = request.POST.get("link").strip()
+
+        if not title or not link:
+            messages.success(request, "Maydonlar bo'sh bo'lmasin")
+            return redirect('judge_media')
+        
+        link = extract_iframe_src(link)
+
+        if not link:
+            messages.error(request, "Iltimos, to‘g‘ri iframe kod kiriting")
+            return redirect('judge_media')
+        
+        vedio.title = title
+        vedio.link = link
+
+        vedio.save()
+
+        messages.success(request, "Vedio muvaffaqiyatli tahrirlandi")
+
+    return redirect('judge_media')
