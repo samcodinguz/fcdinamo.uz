@@ -76,7 +76,9 @@
                                     </td>
                                     <td>
                                         <div class="avatar-lg d-flex justify-content-center align-items-center">
+                                            {% if new.image %}
                                             <img src="{{ new.image.url }}" alt="{{ new.title }}" class="img-fluid rounded" />
+                                            {% endif %}
                                         </div>
                                     </td>
                                     <td>

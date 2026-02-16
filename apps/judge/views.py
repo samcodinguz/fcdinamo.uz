@@ -188,7 +188,7 @@ def judge_news_add(request):
         image = request.FILES.get('file')
         tags = request.POST.getlist('tags')
   
-        if not title or not category_id:
+        if not title or not category_id or not image:
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_news_add')
         

@@ -170,8 +170,28 @@ def galery_video(request):
     context = {
         'pagination_range': pagination_range,
         "videos": videos,
-        'page_title': 'Barcha yangiliklar',
+        'page_title': 'Vedio lavhalar',
         'paths': paths
     }
     context.update(get_base_context(request))
     return render(request, 'core/galery/video.html', context)
+
+
+def galery_photo(request):
+
+    photos = News.objects.all().order_by('-created_at')
+    photos, pagination_range = paginate_queryset(photos, request, per_page=9)
+
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'photo', 'url': 'galery_photo', 'args': []},
+    ]
+
+    context = {
+        'pagination_range': pagination_range,
+        "photos": photos,
+        'page_title': 'Foto lavhalar',
+        'paths': paths
+    }
+    context.update(get_base_context(request))
+    return render(request, 'core/galery/photo.html', context)
