@@ -23,8 +23,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost', 
-    'u-ff.uz',
-    'www.u-ff.uz',
+    'oqdaryommtb.uz',
+    'www.oqdaryommtb.uz',
     '85.239.58.108',
 ]
 
@@ -34,8 +34,8 @@ CSRF_TRUSTED_ORIGINS = [
     
     'https://127.0.0.1',
     'https://localhost',
-    'https://u-ff.uz',
-    'https://www.u-ff.uz',
+    'https://oqdaryommtb.uz',
+    'https://www.oqdaryommtb.uz',
 ]
 
 LOGIN_URL = 'sign-in'
