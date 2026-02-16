@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from apps.core.utils import get_base_context
-from apps.leagues.models import Season
+from apps.leagues.models import Season, TeamType
 from apps.matches.utils import get_main_team
 from apps.leagues.utils import get_last_season
 from apps.leagues.utils import get_active_leagues
@@ -9,6 +9,8 @@ from . import utils
 def standings(request, code):
 
     league_id = request.GET.get("league")
+
+    team_type = TeamType.objects.filter(code=code).first()
 
     last_men_season = get_last_season(team_type=code)
     leagues = get_active_leagues(code)
@@ -34,7 +36,8 @@ def standings(request, code):
         'leagues': leagues,
         'league': league,
         'season': season,
-        'page_title': 'Natijalar jadvali',
+        'page_title': f'{team_type.name} {season.year} - yil {league} natijalar jadvali' if team_type and season and league else 'Natijalar jadvali',
+        'team_type': team_type.name,
         'paths': paths,
         'men': 'active'
     }

@@ -37,7 +37,7 @@
         <!-- Start Main Content -->
         <div class="content-page">
             <div class="container">
-                <div class="page-title-head d-flex align-items-center justify-content-end">
+                <div class="page-title-head d-flex align-items-center justify-content-start justify-content-md-end">
                     {% include 'core/components/breadcrumb.html' %}
                 </div>
             </div>
@@ -94,7 +94,7 @@
                                                     <h5 class="text-uppercase d-none d-md-block">{{ news.category.name }}</h5>
                                                     <h4 class="text-dark news-card-title d-none d-md-block">{{ news.title }}</h4>
                                                     <h6 class="text-uppercase d-md-none">{{ news.category.name }}</h6>
-                                                    <h5 class="text-dark news-card-title d-md-none">{{ news.title }}</h5>
+                                                    <h5 class="text-dark news-card-title d-md-none">{{ news.title|truncatewords:7 }}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +115,7 @@
                                                     <h5 class="text-uppercase d-none d-md-block">{{ news.category.name }}</h5>
                                                     <h4 class="text-dark news-card-title d-none d-md-block">{{ news.title }}</h4>
                                                     <h6 class="text-uppercase d-md-none">{{ news.category.name }}</h6>
-                                                    <h5 class="text-dark news-card-title d-md-none">{{ news.title }}</h5>
+                                                    <h5 class="text-dark news-card-title d-md-none">{{ news.title|truncatewords:7 }}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,109 +124,20 @@
                             </div>
                             {% endfor %}
                         </div>
-                    </div>
-                    <div class="col-12 col-xl-4 d-none d-xl-block">
-                        <div class="card shadow-none rounded-0 mb-4" style="background: none !important;">
-                            <div class="card-body">
-                                <div class="row mb-4">
-                                    <div class="col-6">
-                                        <h4 class="mb-0">Navbatdagi o'yin</h4>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end align-items-center">
-                                        <a href="{% url 'matches_upcoming' 'men' %}" class="fw-medium d-inline-flex align-items-center gap-1">
-                                            Barcha o'yinlar <i class="ti ti-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                {% if next_men_match %}
-                                <h3 class="text-center text-dark mt-2">{{ next_men_match.match_date|date:"d F" }}</h3>
-                                <p class="text-center text-dark fs-5">{{ next_men_match.season.league.name }}</p>
-                                <div class="row mb-4">
-                                    <div class="col-4 d-flex justify-content-center">
-                                        <div>
-                                            <div class="d-flex justify-content-center">
-                                                <img src="{{ next_men_match.home_team.logo.url }}" width="55" alt="{{ next_men_match.home_team.name }}">
-                                            </div>
-                                            <h5 class="text-dark my-2">
-                                                {{ next_men_match.home_team.name }}
-                                            </h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 d-flex justify-content-center align-items-center">
-                                        <div>
-                                            <h3 class="text-dark">
-                                                {{ next_men_match.match_date|date:"H : i" }}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 d-flex justify-content-center">
-                                        <div>
-                                            <div class="d-flex justify-content-center">
-                                                <img src="{{ next_men_match.away_team.logo.url }}" width="55" alt="{{ next_men_match.home_team.name }}">
-                                            </div>
-                                            <h5 class="text-dark my-2">
-                                                {{ next_men_match.away_team.name }}
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <h4 class="text-muted text-center my-3"><i>Mavjud emas</i></h4>
-                                {% endif %}
-                            </div>
+                        <div class="px-md-2 d-block d-xl-none py-3 mb-4 border-bottom border-dashed">
+                            <a href="{% url 'news_all' %}" class="fw-medium d-inline-flex align-items-center gap-1">
+                                Barcha yangiliklar <i class="ti ti-arrow-right"></i>
+                            </a>
                         </div>
-                        <div class="card shadow-none rounded-0 mb-4" style="background: none !important;">
-                            <div class="card-body">
-                                <div class="row mb-4">
-                                    <div class="col-6">
-                                        <h4 class="mb-0">Oxirgi o'yin natijasi</h4>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end align-items-center">
-                                        <a href="{% url 'matches_finished' 'men' %}" class="fw-medium d-inline-flex align-items-center gap-1">
-                                            Barcha o'yinlar <i class="ti ti-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                {% if last_men_match %}
-                                <h3 class="text-center text-dark mt-2">{{ last_men_match.match_date|date:"d F" }}</h3>
-                                <p class="text-center text-dark fs-5">{{ last_men_match.season.league.name }}</p>
-                                <div class="row mb-4">
-                                    <div class="col-4 d-flex justify-content-center">
-                                        <div>
-                                            <div class="d-flex justify-content-center">
-                                                <img src="{{ last_men_match.home_team.logo.url }}" width="55" alt="{{ last_men_match.home_team.name }}">
-                                            </div>
-                                            <h5 class="text-dark my-2">
-                                                {{ last_men_match.home_team.name }}
-                                            </h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 d-flex justify-content-center align-items-center">
-                                        <div>
-                                            <h3 class="text-dark">
-                                                {{ last_men_match.home_goals }} : {{ last_men_match.away_goals }}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 d-flex justify-content-center">
-                                        <div>
-                                            <div class="d-flex justify-content-center">
-                                                <img src="{{ last_men_match.away_team.logo.url }}" width="55" alt="{{ last_men_match.home_team.name }}">
-                                            </div>
-                                            <h5 class="text-dark my-2">
-                                                {{ last_men_match.away_team.name }}
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <h4 class="text-muted text-center my-3"><i>Mavjud emas</i></h4>
-                                {% endif %}
-                            </div>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-xl-12">{% include 'core/components/next-match.html' %}</div>
+                            <div class="col-12 col-md-6 col-xl-12">{% include 'core/components/finish-match.html' %}</div>
                         </div>
                     </div>
                 </div>
-                <div class="px-md-2">
+                <div class="px-md-2 d-none d-xl-block">
                     <a href="{% url 'news_all' %}" class="fw-medium d-inline-flex align-items-center gap-1">
                         Barcha yangiliklar <i class="ti ti-arrow-right"></i>
                     </a>

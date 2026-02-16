@@ -1,7 +1,7 @@
 
 <div class="container">
     <div class="card rounded-0 border-0 shadow-none" style="background: none !important;">
-        <div class="card-header border-0 ps-0 ps-md-3">
+        <div class="card-header border-0 px-0 px-md-3">
             {% include "matches/components/filter.html" %}
         </div>
         <div class="table-responsive mb-4">
@@ -25,7 +25,7 @@
                             <div class="d-flex justify-content-center align-items-center">
                                 <h2 class="mb-0">
                                     {% if match.is_finished %}
-                                    <span class="badge text-bg-dark me-1">{{ match.home_goals }}</span><span class="badge text-bg-dark">{{ match.away_goals }}</span>
+                                    <span class="badge text-bg-dark me-1">{{ match.home_goals }}</span> : <span class="badge text-bg-dark">{{ match.away_goals }}</span>
                                     {% else %}
                                     <span class="badge text-bg-light">{{ match.match_date|date:"H:i" }}</span>
                                     {% endif %}
@@ -46,7 +46,7 @@
                     {% endfor %}
                     {% else %}
                     <tr>
-                        <td>{{ page_title }} topilmadi.</td>
+                        <td>{{ page_title }} o'yinlari topilmadi.</td>
                     </tr>
                     {% endif %}
                 </tbody>

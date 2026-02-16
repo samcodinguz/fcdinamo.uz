@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from apps.leagues.models import Season
 from apps.core.utils import get_base_context
+from apps.leagues.models import TeamType
 from . import utils
 
 def matches_finished(request, code):
+
+    team_type = TeamType.objects.filter(code=code).first()
 
     season = request.GET.get('season')
     seasons = Season.objects.filter(team_type__code=code).order_by('-year')
@@ -27,7 +30,6 @@ def matches_finished(request, code):
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_finished', 'args': [code]},
         {'title': 'finished', 'url': 'matches_finished', 'args': [code]},
         {'title': code, 'url': 'matches_finished', 'args': [code]},
     ]
@@ -36,7 +38,7 @@ def matches_finished(request, code):
         'seasons': seasons,
         'seasons_year': seasons_year,
         'current_season': season.year if season else None,
-        'page_title': 'Yakunlangan o\'yinlar',
+        'page_title': team_type.name,
         'paths': paths,
         'men': 'active',
         'finished': 'active',
@@ -47,18 +49,19 @@ def matches_finished(request, code):
 
 def matches_upcoming(request, code):
 
+    team_type = TeamType.objects.filter(code=code).first()
+
     season = Season.objects.order_by('-year').first()
     matches_upcoming_all = utils.get_matches(season, team_type=code, finished=False, order='last', single=False)
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
-        {'title': 'matches', 'url': 'matches_upcoming', 'args': [code]},
         {'title': 'upcoming', 'url': 'matches_upcoming', 'args': [code]},
         {'title': code, 'url': 'matches_upcoming', 'args': [code]},
     ]
     context = {
         'grouped_matches': utils.group_matches_by_month(matches_upcoming_all),
-        'page_title': 'Navbatdagi o\'yinlar',
+        'page_title': team_type.name,
         'paths': paths,
         'men': 'active',
         'upcoming': 'active',

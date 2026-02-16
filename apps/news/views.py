@@ -17,8 +17,13 @@ def news_all(request):
     news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
 
     season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    next_women_match = get_matches(season, team_type='women', finished=False, order='first', single=True)
+    
+    next_matches = []
+    team_types = TeamType.objects.order_by('order')
+
+    for team in team_types:
+        match = get_matches(season, team_type=team.code, finished=False, order='first', single=True)
+        next_matches.append({'team_type': team.name.split()[0], 'code': team.code, 'match': match})
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
@@ -28,8 +33,7 @@ def news_all(request):
     context = {
         'news_list': news_list,
         'pagination_range': pagination_range,
-        'next_men_match': next_men_match,
-        'next_women_match': next_women_match,
+        'next_matches': next_matches,
         'page_title': 'Barcha yangiliklar',
         'paths': paths,
         'tag_name': tag_name,
@@ -45,8 +49,13 @@ def news(request, code):
     news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
 
     season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    next_women_match = get_matches(season, team_type='women', finished=False, order='first', single=True)
+    
+    next_matches = []
+    team_types = TeamType.objects.order_by('order')
+
+    for team in team_types:
+        match = get_matches(season, team_type=team.code, finished=False, order='first', single=True)
+        next_matches.append({'team_type': team.name.split()[0], 'code': team.code, 'match': match})
 
     paths = [
         {'title': 'home', 'url': 'home', 'args': []},
@@ -57,8 +66,7 @@ def news(request, code):
     context = {
         'news_list': news_list,
         'pagination_range': pagination_range,
-        'next_men_match': next_men_match,
-        'next_women_match': next_women_match,
+        'next_matches': next_matches,
         'page_title': f"{team_type.name} yangiliklari",
         'paths': paths,
     }

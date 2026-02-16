@@ -5,7 +5,7 @@ from django.contrib import messages
 from apps.news.models import News
 from . import utils
 from apps.matches.utils import get_matches
-from apps.leagues.models import Season
+from apps.leagues.models import Season, TeamType
 from .models import Contact, Message, Video
 from django.utils import timezone
 from datetime import timedelta
@@ -18,15 +18,25 @@ def index(request):
     news_prev_3 = news_list[3:6]
 
     season = Season.objects.order_by('-year').first()
-    next_men_match = get_matches(season, team_type='men', finished=False, order='first', single=True)
-    last_men_match = get_matches(season, team_type='men', finished=True, order='last', single=True)
+
+    next_matches = []
+    finish_matchs = []
+
+    team_types = TeamType.objects.order_by('order')
+
+    for team in team_types:
+        next_match = get_matches(season, team_type=team.code, finished=False, order='first', single=True)
+        finish_match = get_matches(season, team_type=team.code, finished=True, order='last', single=True)
+
+        next_matches.append({'team_type': team.name.split()[0], 'code': team.code, 'match': next_match})
+        finish_matchs.append({'team_type': team.name.split()[0], 'code': team.code, 'match': finish_match})
 
     context = {
         'news_first': news_list.first(),
         'news_prev_2': news_prev_2,
         'news_prev_3': news_prev_3,
-        'next_men_match': next_men_match,
-        'last_men_match': last_men_match,
+        'next_matches': next_matches,
+        'finish_matches': finish_matchs
     }
     context.update(utils.get_base_context(request))
     return render(request, 'core/index.html', context)

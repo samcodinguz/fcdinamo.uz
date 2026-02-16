@@ -1,0 +1,66 @@
+{% if next_matches %}
+<div class="card card-top-sticky-4 shadow-none rounded-0 mb-4" style="background: none !important;">
+    <div class="card-header">
+        <ul class="nav nav-underline" data-bs-toggle="tabs">
+            {% for match in next_matches %}
+            <li class="nav-item">
+                <a href="#{{ match.code }}" class="nav-link px-2 {% if forloop.first %}active{% endif %}" data-bs-toggle="tab">{{ match.team_type }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            {% for match in next_matches %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ match.code }}">
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h4 class="mb-0">Navbatdagi o'yin</h4>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <a href="{% url 'matches_upcoming' match.code %}" class="fw-medium d-inline-flex align-items-center gap-1">
+                            Barcha o'yinlar <i class="ti ti-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                {% if match.match %}
+                <h3 class="text-center text-dark my-2">{{ match.match.match_date|date:"d F" }}</h3>
+                <p class="text-center text-dark fs-5">{{ match.match.season.league.name }}</p>
+                <div class="row mb-4">
+                    <div class="col-4 d-flex justify-content-center">
+                        <div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ match.match.home_team.logo.url }}" width="55" alt="{{ match.match.home_team.name }}">
+                            </div>
+                            <h5 class="text-dark my-2">
+                                {{ match.match.home_team.name }}
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-center align-items-center">
+                        <div>
+                            <h3 class="text-dark">
+                                {{ match.match.match_date|date:"H : i" }}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-center">
+                        <div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ match.match.away_team.logo.url }}" width="55" alt="{{ match.match.home_team.name }}">
+                            </div>
+                            <h5 class="text-dark my-2">
+                                {{ match.match.away_team.name }}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <h4 class="text-muted text-center my-3"><i>Mavjud emas</i></h4>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

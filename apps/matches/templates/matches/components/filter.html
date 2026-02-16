@@ -1,14 +1,25 @@
-<div class="d-flex align-items-center gap-2">
+<div class="row align-items-center mb-3 w-100">
+    <div class="col">
+        <h3 class="text-dark mb-0">{{ page_title }}</h3>
+    </div>
+
     {% if seasons_year %}
-    <label for="dt-length-0">Mavsum bo'yicha filter:</label>
-    <form method="get">
-        <select class="form-select form-control my-1 my-md-0" name="season" id="dt-length-0" onchange="this.form.submit()">
-            {% for s in seasons_year %}
-            <option value="{{ s.year }}" {% if s.year == current_season %}selected{% endif %}>
-                {{ s.label }}
-            </option>
-            {% endfor %}
-        </select>
-    </form>
+    <div class="col-auto">
+        <form method="get" class="d-flex align-items-center gap-2">
+            <label for="dt-length-0" class="mb-0 text-nowrap">
+                Mavsum:
+            </label>
+            <select class="form-select"
+                    name="season"
+                    id="dt-length-0"
+                    onchange="this.form.submit()">
+                {% for s in seasons_year %}
+                <option value="{{ s.year }}" {% if s.year == current_season %}selected{% endif %}>
+                    {{ s.label }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
     {% endif %}
 </div>
