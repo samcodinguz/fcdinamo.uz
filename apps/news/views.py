@@ -4,6 +4,7 @@ from apps.leagues.models import Season
 from apps.matches.utils import get_matches
 from django.shortcuts import render, get_object_or_404
 from apps.core.utils import get_base_context, paginate_queryset
+from apps.leagues.models import TeamType
 
 def news_all(request):
 
@@ -38,6 +39,8 @@ def news_all(request):
 
 def news(request, code):
 
+    team_type = TeamType.objects.filter(code=code).first()
+
     news_list = News.objects.filter(is_published=True, category__code=code).select_related('category').order_by('-created_at')
     news_list, pagination_range = paginate_queryset(news_list, request, per_page=5)
 
@@ -56,7 +59,7 @@ def news(request, code):
         'pagination_range': pagination_range,
         'next_men_match': next_men_match,
         'next_women_match': next_women_match,
-        'page_title': "Erkaklar jamoasi yangiliklari",
+        'page_title': f"{team_type.name} yangiliklari",
         'paths': paths,
     }
     context.update(get_base_context(request))

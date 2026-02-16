@@ -15,7 +15,7 @@ def is_strong_password(password: str) -> bool:
     if len(password) < 8:
         return False
 
-    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$'
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%])[A-Za-z\d!@#$%]+$'
     return bool(re.match(pattern, password))
 
 def get_base_context(request):
