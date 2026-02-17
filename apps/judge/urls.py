@@ -76,4 +76,10 @@ urlpatterns = [
     path('video/add', views.judge_video_add, name='judge_video_add'),
     path('video/delete/<int:video_id>', views.judge_video_delete, name='judge_video_delete'),
     path('video/edit/<int:video_id>', views.judge_video_edit, name='judge_video_edit'),
+
+    
+    path('sponsors', views.judge_sponsors, name='judge_sponsors'),
+    path('sponsors/add', views.judge_sponsors_add, name='judge_sponsors_add'),
+    path('sponsors/edit/<int:id>', views.judge_sponsors_edit, name='judge_sponsors_edit'),
+    path('sponsors/delete/<int:id>', views.judge_sponsors_delete, name='judge_sponsors_delete'),
 ]

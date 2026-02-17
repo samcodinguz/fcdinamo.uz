@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .utils import get_base_context, extract_iframe_src, crop_to_16_9, crop_to_1_1
+from .utils import get_base_context, extract_iframe_src, crop_to_16_9, crop_to_1_1, crop_to_2_1
 from apps.news.models import News, NewsTag
 from apps.core.utils import paginate_queryset
-from apps.core.models import MyClub
+from apps.core.models import MyClub, Sponsor
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.users.models import CustomUser
@@ -144,13 +144,13 @@ def judge_news_edit(request, news_id):
                 news.image.delete(save=False)
 
             image = request.FILES['file']
-            ALLOWED_TYPES = ["image/jpeg", "image/png"]
-            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
             ext = image.name.rsplit('.', 1)[-1].lower()
 
             if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
                 return redirect('judge_news_edit', news_id=news.id)
             
             news.image = crop_to_16_9(image)
@@ -204,13 +204,13 @@ def judge_news_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_news_add')
         
-        ALLOWED_TYPES = ["image/jpeg", "image/png"]
-        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
         ext = image.name.rsplit('.', 1)[-1].lower()
 
         if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_news_add')
 
         
@@ -948,13 +948,13 @@ def judge_players_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_players_add')
         
-        ALLOWED_TYPES = ["image/jpeg", "image/png"]
-        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
         ext = image.name.rsplit('.', 1)[-1].lower()
 
         if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_players_add')
         
         team_type = get_object_or_404(TeamType, id=team_type)
@@ -1026,13 +1026,13 @@ def judge_players_edit(request, player_id):
                 player.image.delete(save=False)
 
             image = request.FILES['image']
-            ALLOWED_TYPES = ["image/jpeg", "image/png"]
-            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
             ext = image.name.rsplit('.', 1)[-1].lower()
 
             if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
                 return redirect('judge_players_edit', player_id=player.id)
             
             player.image = crop_to_1_1(image)
@@ -1225,13 +1225,13 @@ def judge_coachs_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_coachs_add')
         
-        ALLOWED_TYPES = ["image/jpeg", "image/png"]
-        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
         ext = image.name.rsplit('.', 1)[-1].lower()
 
         if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_coachs_add')
         
         team_type = get_object_or_404(TeamType, id=team_type)
@@ -1301,13 +1301,13 @@ def judge_coachs_edit(request, coach_id):
                 coach.image.delete(save=False)
 
             image = request.FILES['image']
-            ALLOWED_TYPES = ["image/jpeg", "image/png"]
-            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
             ext = image.name.rsplit('.', 1)[-1].lower()
 
             if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
                 return redirect('judge_coachs_edit', coach_id=coach.id)
             
             coach.image = crop_to_1_1(image)
@@ -1488,13 +1488,13 @@ def judge_managements_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_managements_add')
         
-        ALLOWED_TYPES = ["image/jpeg", "image/png"]
-        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
         ext = image.name.rsplit('.', 1)[-1].lower()
 
         if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_managements_add')
 
         position = get_object_or_404(ManagementPosition, id=position)
@@ -1559,13 +1559,13 @@ def judge_managements_edit(request, management_id):
                 management.image.delete(save=False)
 
             image = request.FILES['image']
-            ALLOWED_TYPES = ["image/jpeg", "image/png"]
-            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
             ext = image.name.rsplit('.', 1)[-1].lower()
 
             if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
                 return redirect('judge_managements_edit', management_id=management.id)
             
             management.image = crop_to_1_1(image)
@@ -1878,3 +1878,126 @@ def judge_video_edit(request, video_id):
         messages.success(request, "Video muvaffaqiyatli tahrirlandi")
 
     return redirect('judge_galery')
+
+
+
+@login_required
+def judge_sponsors(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    if request.method == "POST":
+        try:
+            ids = request.POST.getlist("selected_ids")
+            sponsors_list = Sponsor.objects.filter(id__in=ids)
+            for sponsor in sponsors_list:
+                if sponsor.logo:
+                    sponsor.logo.delete(save=False)
+            sponsors_list.delete()
+            messages.success(request, f"{len(ids)} ta homiy o'chirildi")
+        except ProtectedError:
+            messages.error(request, "Homiylar orasida ishlatilayotgani bor, o'chirish taqiqlanadi")
+        return redirect('judge_sponsors')
+    
+    per_page = request.GET.get('per_page', 10)
+    clubs_list = Sponsor.objects.all().order_by('-id')
+
+    clubs_list, pagination_range = paginate_queryset(clubs_list, request, per_page=per_page)
+    
+    paths = [
+        {'title': 'judge', 'url': 'judge', 'args': []},
+        {'title': 'sponsor', 'url': 'judge_sponsors', 'args': []},
+    ]
+
+    context = {
+        'per_page': str(per_page),
+        'pagination_range': pagination_range,
+        'clubs_list': clubs_list,
+        'paths': paths,
+        'page_title': 'Homiylar'
+    }
+    context.update(get_base_context(request))
+    return render(request, 'judge/sponsor/sponsor.html', context)
+
+
+@login_required
+def judge_sponsors_add(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    if request.method == "POST":
+
+        name = request.POST.get('name')
+        link = request.POST.get('link')
+        logo = request.FILES.get('logo')
+        
+        if not name or not logo:
+            messages.error(request, "Majburiy maydonlar to'ldirilmagan")
+            return redirect('judge_sponsors')
+        
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
+
+        ext = logo.name.rsplit('.', 1)[-1].lower()
+
+        if logo.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
+            return redirect('judge_sponsors')
+
+        Sponsor.objects.create(name=name, link=link, logo=crop_to_2_1(logo))
+        messages.success(request, "Homiy muvaffaqiyatli yaratildi")
+    
+    return redirect('judge_sponsors')
+
+
+@login_required
+def judge_sponsors_edit(request, id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    sponsor = get_object_or_404(Sponsor, id=id)
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        link = request.POST.get("link")
+        logo = request.POST.get("logo")
+
+        if not name or not link:
+            messages.error(request, "Majburiy maydonlar to'ldirilmagan")
+            return redirect("judge_sponsors")
+        
+        sponsor.name = name
+        sponsor.link = link
+
+        if 'logo' in request.FILES:
+            if sponsor.logo:
+                sponsor.logo.delete(save=False)
+
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
+
+            ext = logo.name.rsplit('.', 1)[-1].lower()
+
+            if logo.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
+                return redirect('judge_sponsors', id=sponsor.id)
+            sponsor.logo = crop_to_2_1(logo)
+
+        sponsor.save()
+        messages.success(request, "Homiy muvaffaqiyatli yangilandi")
+
+    return redirect("judge_sponsors")
+
+@login_required
+def judge_sponsors_delete(request, id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    sponsor = get_object_or_404(Sponsor, id=id)
+    try:
+        if sponsor.logo:
+            sponsor.logo.delete(save=False)
+        sponsor.delete()
+        messages.success(request, "Homiy muvaffaqiyatli o'chirildi")
+    except ProtectedError:
+            messages.error(request, "Bu homiy ishlatilmoqda, o'chirish taqiqlanadi")
+    return redirect('judge_sponsors')
