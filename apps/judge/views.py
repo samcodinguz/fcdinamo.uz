@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .utils import get_base_context, extract_iframe_src
+from .utils import get_base_context, extract_iframe_src, crop_to_16_9, crop_to_1_1
 from apps.news.models import News, NewsTag
 from apps.core.utils import paginate_queryset
 from apps.core.models import MyClub
@@ -13,7 +13,8 @@ from apps.leagues.models import Season, League, TeamType
 from django.db.models.deletion import ProtectedError
 from apps.core.models import Contact
 from apps.core.models import Message, Video
-import os
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 @login_required
 def judge(request):
@@ -141,7 +142,18 @@ def judge_news_edit(request, news_id):
         if 'file' in request.FILES:
             if news.image:
                 news.image.delete(save=False)
-            news.image = request.FILES['file']
+
+            image = request.FILES['file']
+            ALLOWED_TYPES = ["image/jpeg", "image/png"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+            ext = image.name.rsplit('.', 1)[-1].lower()
+
+            if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                return redirect('judge_news_edit', news_id=news.id)
+            
+            news.image = crop_to_16_9(image)
 
         news.save()
         messages.success(request, "Yangilik muvaffaqiyatli saqlandi")
@@ -192,6 +204,16 @@ def judge_news_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_news_add')
         
+        ALLOWED_TYPES = ["image/jpeg", "image/png"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+        ext = image.name.rsplit('.', 1)[-1].lower()
+
+        if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            return redirect('judge_news_add')
+
+        
         category = get_object_or_404(TeamType, id=category_id)
         author = get_object_or_404(CustomUser, id=author_id)
 
@@ -204,7 +226,7 @@ def judge_news_add(request):
             facebook_url=facebook_url,
             instagram_url=instagram_url,
             is_published=is_published,
-            image=image
+            image=crop_to_16_9(image)
         )
 
         if tags:
@@ -232,7 +254,6 @@ def judge_news_add(request):
     }
     context.update(get_base_context(request))
     return render(request, 'judge/news/add.html', context)
-
 
 
 
@@ -925,7 +946,16 @@ def judge_players_add(request):
   
         if not name or not position or not team_type or not date_of_birth or not location or not joined_date or not image or not number or not order:
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
-            return redirect('judge_players')
+            return redirect('judge_players_add')
+        
+        ALLOWED_TYPES = ["image/jpeg", "image/png"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+        ext = image.name.rsplit('.', 1)[-1].lower()
+
+        if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            return redirect('judge_players_add')
         
         team_type = get_object_or_404(TeamType, id=team_type)
         position = get_object_or_404(PlayerPosition, id=position)
@@ -937,7 +967,7 @@ def judge_players_add(request):
             date_of_birth=date_of_birth,
             location=location,
             joined_date=joined_date,
-            image=image,
+            image=crop_to_1_1(image),
             biography=biography,
             number=number,
             order=order
@@ -994,7 +1024,18 @@ def judge_players_edit(request, player_id):
         if request.FILES.get("image"):
             if player.image:
                 player.image.delete(save=False)
-            player.image = request.FILES["image"]
+
+            image = request.FILES['image']
+            ALLOWED_TYPES = ["image/jpeg", "image/png"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+            ext = image.name.rsplit('.', 1)[-1].lower()
+
+            if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                return redirect('judge_players_edit', player_id=player.id)
+            
+            player.image = crop_to_1_1(image)
 
         player.save()
         messages.success(request, "O'yinchi yangilandi")
@@ -1182,7 +1223,16 @@ def judge_coachs_add(request):
   
         if not name or not position or not team_type or not date_of_birth or not location or not joined_date or not image or not order:
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
-            return redirect('judge_coachs')
+            return redirect('judge_coachs_add')
+        
+        ALLOWED_TYPES = ["image/jpeg", "image/png"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+        ext = image.name.rsplit('.', 1)[-1].lower()
+
+        if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            return redirect('judge_coachs_add')
         
         team_type = get_object_or_404(TeamType, id=team_type)
         position = get_object_or_404(CoachPosition, id=position)
@@ -1194,7 +1244,7 @@ def judge_coachs_add(request):
             date_of_birth=date_of_birth,
             location=location,
             joined_date=joined_date,
-            image=image,
+            image=crop_to_1_1(image),
             biography=biography,
             order=order
         )
@@ -1249,7 +1299,18 @@ def judge_coachs_edit(request, coach_id):
         if request.FILES.get("image"):
             if coach.image:
                 coach.image.delete(save=False)
-            coach.image = request.FILES["image"]
+
+            image = request.FILES['image']
+            ALLOWED_TYPES = ["image/jpeg", "image/png"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+            ext = image.name.rsplit('.', 1)[-1].lower()
+
+            if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                return redirect('judge_coachs_edit', coach_id=coach.id)
+            
+            coach.image = crop_to_1_1(image)
 
         coach.save()
         messages.success(request, "Murabbiy yangilandi")
@@ -1425,7 +1486,16 @@ def judge_managements_add(request):
   
         if not name or not position or not date_of_birth or not location or not image or not order or not email:
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
-            return redirect('judge_managements')
+            return redirect('judge_managements_add')
+        
+        ALLOWED_TYPES = ["image/jpeg", "image/png"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+        ext = image.name.rsplit('.', 1)[-1].lower()
+
+        if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+            messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+            return redirect('judge_managements_add')
 
         position = get_object_or_404(ManagementPosition, id=position)
 
@@ -1434,7 +1504,7 @@ def judge_managements_add(request):
             position=position,
             date_of_birth=date_of_birth,
             location=location,
-            image=image,
+            image=crop_to_1_1(image),
             email=email,
             biography=biography,
             order=order
@@ -1487,7 +1557,18 @@ def judge_managements_edit(request, management_id):
         if request.FILES.get("image"):
             if management.image:
                 management.image.delete(save=False)
-            management.image = request.FILES["image"]
+
+            image = request.FILES['image']
+            ALLOWED_TYPES = ["image/jpeg", "image/png"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png"]
+
+            ext = image.name.rsplit('.', 1)[-1].lower()
+
+            if image.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
+                messages.error(request, "Faqat JPG, JPEG yoki PNG rasm yuklash mumkin")
+                return redirect('judge_managements_edit', management_id=management.id)
+            
+            management.image = crop_to_1_1(image)
 
         management.save()
         messages.success(request, "Rahbar yangilandi")
@@ -1672,9 +1753,6 @@ def judge_contacts(request):
         return redirect('judge_club_infos')
     return redirect('judge_club_infos')
 
-
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
 
 @require_POST
 @login_required

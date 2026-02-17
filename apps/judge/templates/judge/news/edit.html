@@ -42,18 +42,22 @@
                         <div class="card">
                             <div class="card-header d-block p-3">
                                 <h4 class="card-title mb-1">Yangilik rasmi</h4>
-                                <p class="text-muted mb-0">Saytda yangiliklar chiroyli dezayn berishni hoxlasangiz 810x456 o'lchamdagi tasvir yuklang.</p>
+                                <ul class="text-muted">
+                                    <li>Tavsiya etilgan rasm nisbati — <strong>16:9</strong>.</li>
+                                    <li>Agar rasm boshqa o'lchamda bo'lsa, tizim uni avtomatik moslashtiradi.</li>
+                                    <li>Qo'llab-quvvatlanadigan formatlar: <strong>JPG, JPEG, PNG</strong>.</li>
+                                </ul>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="newsImage" class="form-label">Rasm tanlash</label>
-                                        <input type="file" class="form-control" name="file" id="newsImage">
+                                        <label for="newsImage" class="form-label">Rasm tanlash <span class="text-muted">(majburiy emas)</span></label>
+                                        <input type="file" class="form-control" name="file" id="newsImage" accept=".jpg,.jpeg,.png">
                                     </div>
                                     {% if news.image %}
                                     <div class="col-12 mt-2">
                                         <p class="text-muted">
-                                            Hozirgi fayl: <strong>{{ news.image.name|slice:"6:" }}</strong>
+                                            Hozirgi fayl: <strong>{{ news.image.name|slice:"5:" }}</strong>
                                         </p>
                                     </div>
                                     {% endif %}
