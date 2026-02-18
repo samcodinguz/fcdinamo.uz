@@ -1986,7 +1986,7 @@ def judge_sponsors_edit(request, id):
     if request.method == "POST":
         name = request.POST.get("name")
         link = request.POST.get("link")
-        logo = request.POST.get("logo")
+        logo = request.FILES.get("logo")
 
         if not name or not link:
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
