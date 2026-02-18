@@ -67,3 +67,21 @@
     font-family: Arial, sans-serif;
 }
 
+@media (max-width: 768px) {
+    .player-number {
+        font-size: 36px;
+        -webkit-text-stroke: 1px #313a46;
+        top: 6px;
+        right: 6px;
+    }
+
+    .player-number-dark {
+        font-size: 46px;
+        -webkit-text-stroke: 1.2px #4c4c5c;
+        top: 6px;
+        right: 6px;
+    }
+    .player-title {
+        font-size: 16px;
+    }
+}
