@@ -150,32 +150,33 @@ def crop_to_2_1(image_file, quality=90):
         name=f"logo_2x1.{extension}"
     )
 
-
-
 from urllib.parse import urlparse, parse_qs
 
 
 def extract_iframe_src(text: str) -> str | None:
     """
-    YouTube iframe kodidan xavfsiz embed URL chiqaradi
+    YouTube iframe / watch / youtu.be linklardan
+    faqat VIDEO ID ni ajratib oladi.
     """
 
-    # 1️⃣ iframe ichidan src olish
+    if not text:
+        return None
+
+    text = text.strip()
+
+    # 1️⃣ Agar iframe bo‘lsa — src ni ajratib olamiz
     iframe_match = re.search(
         r'<iframe[^>]+src=["\']([^"\']+)["\']',
         text,
         re.IGNORECASE
     )
-    if not iframe_match:
-        return None
+    url = iframe_match.group(1) if iframe_match else text
 
-    src = iframe_match.group(1).strip()
-
-    # 2️⃣ URL parse qilish
-    parsed = urlparse(src)
+    parsed = urlparse(url)
     domain = parsed.netloc.lower()
+    path = parsed.path
 
-    # 3️⃣ Faqat YouTube ruxsat
+    # 2️⃣ Faqat YouTube domenlariga ruxsat
     if not any(d in domain for d in (
         "youtube.com",
         "youtu.be",
@@ -185,24 +186,30 @@ def extract_iframe_src(text: str) -> str | None:
 
     video_id = None
 
-    # 4️⃣ watch?v=VIDEO_ID
-    if "watch" in parsed.path:
+    # 3️⃣ https://youtu.be/VIDEO_ID
+    if "youtu.be" in domain:
+        video_id = path.lstrip("/")
+
+    # 4️⃣ https://www.youtube.com/watch?v=VIDEO_ID
+    elif "watch" in path:
         qs = parse_qs(parsed.query)
         video_id = qs.get("v", [None])[0]
 
-    # 5️⃣ youtu.be/VIDEO_ID
-    elif "youtu.be" in domain:
-        video_id = parsed.path.lstrip("/")
+    # 5️⃣ https://www.youtube.com/embed/VIDEO_ID
+    elif "/embed/" in path:
+        video_id = path.split("/embed/")[-1]
 
-    # 6️⃣ /embed/VIDEO_ID
-    elif "/embed/" in parsed.path:
-        video_id = parsed.path.split("/embed/")[-1]
+    # 6️⃣ ID ni oxirgi marta tozalash
+    if video_id:
+        # ?si=..., &feature=... kabi narsalarni olib tashlaymiz
+        video_id = video_id.split("?")[0].split("&")[0]
 
-    if not video_id:
-        return None
+    # 7️⃣ YouTube ID validatsiyasi (11 ta belgi bo‘ladi)
+    if video_id and re.match(r'^[a-zA-Z0-9_-]{11}$', video_id):
+        return video_id
 
-    # 7️⃣ ENG TOZA FORMAT
-    return f"https://www.youtube-nocookie.com/embed/{video_id}"
+    return None
+
 
 def get_base_context(request):
     unread_messages = 0

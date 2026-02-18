@@ -26,7 +26,10 @@
     <link href="{% static 'css/app.min.css' %}" rel="stylesheet" type="text/css" />
     <!-- My css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% block css %}{% endblock css %}
+    {% block css %}
+    <!-- Plyr style -->
+    <link href="{% static 'plugins/plyr/plyr.css' %}" rel="stylesheet" />
+    {% endblock css %}
 </head>
 <body>
     {% include 'core/components/messages.html' %}
@@ -147,7 +150,7 @@
                     <div class="col-12 col-md-4">
                         <div class="card rounded-0">
                             <div class="card-body content p-0">
-                                <iframe width="560" height="315" src="{{ video.link }}?origin=https://u-ff.uz" title="{{ video.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #f8ac59"></div>
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <h3 class="card-title">{{ video.title }}</h3>
@@ -179,6 +182,16 @@
     <script src="{% static 'js/vendors.min.js' %}"></script>
     <!-- App js -->
     <script src="{% static 'js/app.js' %}"></script>
+    <!-- Plyr Plugin Js-->
+    <script src="{% static 'plugins/plyr/plyr.min.js' %}"></script>
+
+    <!-- Plyr Page Js-->
+    <script src="{% static 'js/pages/plugins-plyr.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Plyr.setup(".plyr");
+        });
+    </script>
     {% block js %}
     <script>
         document.addEventListener("DOMContentLoaded", function () {

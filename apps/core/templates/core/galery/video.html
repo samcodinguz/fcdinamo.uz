@@ -1,4 +1,7 @@
-{% extends "core/index.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% extends "core/index.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} 
+<!-- Plyr style -->
+<link href="{% static 'plugins/plyr/plyr.css' %}" rel="stylesheet" />
+{% endblock css %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -6,7 +9,7 @@
         <div class="col-xl-4 col-md-6">
             <div class="card rounded-0">
                 <div class="card-body content p-0">
-                    <iframe width="560" height="315" src="{{ video.link }}?origin=https://u-ff.uz" title="{{ video.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #f8ac59"></div>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <div>
@@ -44,6 +47,16 @@
     </div>
 </div>
 {% endblock content %} {% block js %} 
+<!-- Plyr Plugin Js-->
+<script src="{% static 'plugins/plyr/plyr.min.js' %}"></script>
+
+<!-- Plyr Page Js-->
+<script src="{% static 'js/pages/plugins-plyr.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Plyr.setup(".plyr");
+    });
+</script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const contents = document.querySelectorAll(".content");
