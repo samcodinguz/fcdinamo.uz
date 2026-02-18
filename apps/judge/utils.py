@@ -152,9 +152,57 @@ def crop_to_2_1(image_file, quality=90):
 
 
 
+from urllib.parse import urlparse, parse_qs
+
+
 def extract_iframe_src(text: str) -> str | None:
-    match = re.search(r'src=["\'](https://[^"\']+)["\']', text)
-    return match.group(1) if match else None
+    """
+    YouTube iframe kodidan xavfsiz embed URL chiqaradi
+    """
+
+    # 1️⃣ iframe ichidan src olish
+    iframe_match = re.search(
+        r'<iframe[^>]+src=["\']([^"\']+)["\']',
+        text,
+        re.IGNORECASE
+    )
+    if not iframe_match:
+        return None
+
+    src = iframe_match.group(1).strip()
+
+    # 2️⃣ URL parse qilish
+    parsed = urlparse(src)
+    domain = parsed.netloc.lower()
+
+    # 3️⃣ Faqat YouTube ruxsat
+    if not any(d in domain for d in (
+        "youtube.com",
+        "youtu.be",
+        "youtube-nocookie.com",
+    )):
+        return None
+
+    video_id = None
+
+    # 4️⃣ watch?v=VIDEO_ID
+    if "watch" in parsed.path:
+        qs = parse_qs(parsed.query)
+        video_id = qs.get("v", [None])[0]
+
+    # 5️⃣ youtu.be/VIDEO_ID
+    elif "youtu.be" in domain:
+        video_id = parsed.path.lstrip("/")
+
+    # 6️⃣ /embed/VIDEO_ID
+    elif "/embed/" in parsed.path:
+        video_id = parsed.path.split("/embed/")[-1]
+
+    if not video_id:
+        return None
+
+    # 7️⃣ ENG TOZA FORMAT
+    return f"https://www.youtube-nocookie.com/embed/{video_id}"
 
 def get_base_context(request):
     unread_messages = 0
