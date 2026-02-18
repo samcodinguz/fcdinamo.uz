@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.core.paginator import Paginator
 from apps.leagues.models import TeamType
+from .models import Sponsor
 import re
 
 def is_strong_password(password: str) -> bool:
@@ -19,9 +20,11 @@ def is_strong_password(password: str) -> bool:
     return bool(re.match(pattern, password))
 
 def get_base_context(request):
+
     return {
         'current_year': datetime.now().year,
-        'categorys': TeamType.objects.all().order_by('order')
+        'categorys': TeamType.objects.all().order_by('order'),
+        'sponsors': Sponsor.objects.all().order_by('-id')
     }
 
 def get_pagination_range(current_page, total_pages, delta=1):

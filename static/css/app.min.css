@@ -551,7 +551,7 @@ select:disabled {
 [type=reset],
 [type=submit],
 button {
-    -webkit-appearance: button
+    --webkit-appearance: button;
 }
 
 [type=button]:not(:disabled),
@@ -611,7 +611,7 @@ legend+* {
 }
 
 [type=search] {
-    -webkit-appearance: textfield;
+    --webkit-appearance: textfield;
     outline-offset: -2px
 }
 
@@ -631,49 +631,49 @@ legend+* {
 
 ::-webkit-file-upload-button {
     font: inherit;
-    -webkit-appearance: button
+    -webkit-appearance: button;
 }
 
 ::file-selector-button {
     font: inherit;
-    -webkit-appearance: button
+    --webkit-appearance: button;
 }
 
 output {
-    display: inline-block
+    display: inline-block;
 }
 
 iframe {
-    border: 0
+    border: 0;
 }
 
 summary {
     display: list-item;
-    cursor: pointer
+    cursor: pointer;
 }
 
 progress {
-    vertical-align: baseline
+    vertical-align: baseline;
 }
 
 [hidden] {
-    display: none !important
+    display: none !important;
 }
 
 .lead {
     font-size: 1.09375rem;
-    font-weight: 300
+    font-weight: 300;
 }
 
 .display-1 {
     font-weight: 300;
     line-height: 1.5;
-    font-size: calc(1.625rem + 4.5vw)
+    font-size: calc(1.625rem + 4.5vw);
 }
 
 @media (min-width:1200px) {
     .display-1 {
-        font-size: 5rem
+        font-size: 5rem;
     }
 }
 
@@ -28711,7 +28711,7 @@ span.flatpickr-weekday {
 .flatpickr-day.flatpickr-disabled:hover {
     color: var(--theme-secondary-color);
     text-decoration: line-through;
-    opacity: .5
+    opacity: .5;
 }
 
 .flatpickr-calendar.hasTime .flatpickr-time {
@@ -32785,3 +32785,7 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip] {
 }
 
 /*# sourceMappingURL=app.min.css.map */
+
+[data-bs-theme="dark"] .sponsor-item {
+    background-color: #dee9f7 !important;
+}

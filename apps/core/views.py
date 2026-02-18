@@ -31,12 +31,15 @@ def index(request):
         next_matches.append({'team_type': team.name.split()[0], 'code': team.code, 'match': next_match})
         finish_matchs.append({'team_type': team.name.split()[0], 'code': team.code, 'match': finish_match})
 
+    videos = Video.objects.filter(is_active=True).order_by('-created_at')[:3]
+
     context = {
         'news_first': news_list.first(),
         'news_prev_2': news_prev_2,
         'news_prev_3': news_prev_3,
         'next_matches': next_matches,
-        'finish_matches': finish_matchs
+        'finish_matches': finish_matchs,
+        'videos': videos
     }
     context.update(utils.get_base_context(request))
     return render(request, 'core/index.html', context)

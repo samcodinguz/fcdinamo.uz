@@ -59,3 +59,15 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class ClubSocial(models.Model):
+
+    instagram = models.URLField(blank=True, null=True)
+    telegram = models.URLField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return "Sayt ijtimoiy tarmoqlari"

@@ -47,7 +47,6 @@
     font-weight: 800;
     color: transparent;
     -webkit-text-stroke: 2px #313a46;
-    text-stroke: 2px #313a46;
     line-height: 1;
     font-family: Arial, sans-serif;
 }
@@ -64,7 +63,7 @@
     font-weight: 800;
     color: transparent;
     -webkit-text-stroke: 2px #4c4c5c;
-    text-stroke: 2px #4c4c5c;
     line-height: 1;
     font-family: Arial, sans-serif;
 }
+

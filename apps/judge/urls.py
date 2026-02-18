@@ -69,6 +69,7 @@ urlpatterns = [
     path('club/infos', views.judge_club_infos, name='judge_club_infos'),
 
     path('contacts', views.judge_contacts, name='judge_contacts'),
+    path('socials', views.judge_socials, name='judge_socials'),
 
     path('message/read/', views.mark_message_read, name='mark_message_read'),
     path('message/delete/<int:msg_id>', views.delete_message, name='delete_message'),

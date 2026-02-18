@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .utils import get_base_context, extract_iframe_src, crop_to_16_9, crop_to_1_1, crop_to_2_1
 from apps.news.models import News, NewsTag
 from apps.core.utils import paginate_queryset
-from apps.core.models import MyClub, Sponsor
+from apps.core.models import MyClub, Sponsor, ClubSocial
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.users.models import CustomUser
@@ -1714,6 +1714,7 @@ def judge_club_infos(request):
         return redirect('judge_club_infos')
 
     contact = Contact.objects.all().first()
+    social = ClubSocial.objects.all().first()
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
@@ -1724,6 +1725,7 @@ def judge_club_infos(request):
     context = {
         'club': club,
         'contact': contact,
+        'social': social,
         'paths': paths,
         'page_title': 'Klub ma\'lumotlari'
     }
@@ -1736,20 +1738,44 @@ def judge_contacts(request):
     if not request.user.is_superuser:
         raise PermissionDenied
     
-    contact = Contact.objects.all().first()
+    if Contact.objects.exists():
+        contact = Contact.objects.first()
+    else:
+        contact = Contact.objects.create()
     
     if request.method == 'POST':
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        address = request.POST.get('address')
-
-        contact.phone = phone
-        contact.email = email
-        contact.address = address
+        
+        contact.phone = request.POST.get('phone')
+        contact.email = request.POST.get('email')
+        contact.address = request.POST.get('address')
 
         contact.save()
         
         messages.success(request, "Aloqa ma'lumotlari muvaffaqiyatli yangilandi")
+        return redirect('judge_club_infos')
+    return redirect('judge_club_infos')
+
+
+@login_required
+def judge_socials(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
+    if ClubSocial.objects.exists():
+        social = ClubSocial.objects.first()
+    else:
+        social = ClubSocial.objects.create()
+    
+    if request.method == 'POST':
+        social.instagram = request.POST.get('instagram')
+        social.telegram = request.POST.get('telegram')
+        social.facebook = request.POST.get('facebook')
+        social.youtube = request.POST.get('youtube')
+        social.twitter = request.POST.get('twitter')
+
+        social.save()
+        
+        messages.success(request, "Ijtimoiy tarmoqlar muvaffaqiyatli yangilandi")
         return redirect('judge_club_infos')
     return redirect('judge_club_infos')
 

@@ -93,7 +93,7 @@ def crop_to_1_1(image_file, quality=90):
 
 def crop_to_2_1(image_file, quality=90):
     img = Image.open(image_file)
-    original_format = img.format  # PNG yoki JPEG
+    original_format = img.format  # PNG, JPEG, WEBP, etc
 
     width, height = img.size
     target_ratio = 2 / 1
@@ -110,13 +110,13 @@ def crop_to_2_1(image_file, quality=90):
 
     buffer = BytesIO()
 
+    # 🔹 FORMAT BO‘YICHA SAQLASH
     if original_format == "PNG":
-        # PNG — shaffoflikni saqlaymiz
         img.save(buffer, format="PNG", optimize=True)
         extension = "png"
-    else:
-        # JPEG — RGBA bo‘lsa RGB ga o‘tkazamiz
-        if img.mode == "RGBA":
+
+    elif original_format in ("JPG", "JPEG"):
+        if img.mode in ("RGBA", "P"):
             img = img.convert("RGB")
 
         img.save(
@@ -126,6 +126,23 @@ def crop_to_2_1(image_file, quality=90):
             optimize=True,
             progressive=True
         )
+        extension = "jpg"
+
+    elif original_format == "WEBP":
+        img.save(
+            buffer,
+            format="WEBP",
+            quality=quality,
+            method=6
+        )
+        extension = "webp"
+
+    else:
+        # ❗ Fallback — noma’lum formatlar uchun
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        img.save(buffer, format="JPEG", quality=quality)
         extension = "jpg"
 
     return ContentFile(

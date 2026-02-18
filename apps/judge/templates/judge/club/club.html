@@ -10,7 +10,7 @@
                 {% csrf_token %}
                 <div class="card">
                     <div class="card-header d-block">
-                        <h4 class="card-title">Klub ma'lumotlarini sozlash</h4>
+                        <h4 class="card-title">Klub ma'lumotlari</h4>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -34,32 +34,97 @@
             </form>
         </div>
         <div class="col-xxl-4">
-            <form method="post" action="{% url 'judge_contacts' %}">
-                {% csrf_token %}
-                <div class="card">
-                    <div class="card-header d-block">
-                        <h4 class="card-title">Aloqa ma'lumotlarini sozlash</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Telifon raqam <span class="text-muted">(Klub bilan bog'lanish)</span></label>
-                            <input type="text" class="form-control py-2" id="phone" name="phone" value="{{ contact.phone }}" />
+            <div class="row">
+                <div class="col-12">
+                    <form method="post" action="{% url 'judge_contacts' %}">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header d-block">
+                                <h4 class="card-title">Aloqa ma'lumotlari</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Telifon raqam <span class="text-muted">(Klub bilan bog'lanish)</span></label>
+                                    <input type="text" class="form-control py-2" id="phone" name="phone" value="{{ contact.phone }}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email <span class="text-muted">(Klub pochtasi)</span></label>
+                                    <input type="email" class="form-control py-2" id="email" name="email" value="{{ contact.email }}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Manzil <span class="text-muted">(Klub manzili)</span></label>
+                                    <textarea class="form-control py-2" id="address" name="address" rows="5">{{ contact.address }}</textarea>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email <span class="text-muted">(Klub pochtasi)</span></label>
-                            <input type="email" class="form-control py-2" id="email" name="email" value="{{ contact.email }}" />
+                        <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                            <a href="{% url 'judge_club_infos' %}" class="btn btn-danger fw-semibold"> Saqlamaslik </a>
+                            <button type="submit" class="btn btn-success"> Saqlash </button>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Manzil <span class="text-muted">(Klub manzili)</span></label>
-                            <textarea class="form-control py-2" id="address" name="address" rows="5">{{ contact.address }}</textarea>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
-                    <a href="{% url 'judge_contacts' %}" class="btn btn-danger fw-semibold"> Saqlamaslik </a>
-                    <button type="submit" class="btn btn-success"> Saqlash </button>
+                <div class="col-12">
+                    <form method="post" action="{% url 'judge_socials' %}">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header d-block">
+                                <h4 class="card-title">Ijtimoy tarmoqlari</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="social-instagram" class="form-label">Instagram</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M16.5 7.5v.01" /></svg>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-instagram" placeholder="Instagram URL" name="instagram" value="{{ social.instagram }}" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="social-telegram" class="form-label">Telegram</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" /></svg>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-telegram" placeholder="Telegram URL" name="telegram" value="{{ social.telegram }}" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="social-facebook" class="form-label">Facebook</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-facebook"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" /></svg>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-facebook" placeholder="Facebook URL" name="facebook" value="{{ social.facebook }}" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="social-twitter" class="form-label">Twitter</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-twitter"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013l0 .001" /></svg>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-twitter" placeholder="Twitter URL" name="twitter" value="{{ social.twitter }}" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="social-youtube" class="form-label">YouTube</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-youtube"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 8a4 4 0 0 1 4 -4h12a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-12a4 4 0 0 1 -4 -4v-8" /><path d="M10 9l5 3l-5 3l0 -6" /></svg>
+                                        </span>
+                                        <input type="text" class="form-control" id="social-youtube" placeholder="YouTube URL" name="youtube" value="{{ social.youtube }}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                            <a href="{% url 'judge_club_infos' %}" class="btn btn-danger fw-semibold"> Saqlamaslik </a>
+                            <button type="submit" class="btn btn-success"> Saqlash </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
