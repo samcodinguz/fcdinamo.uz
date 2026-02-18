@@ -40,47 +40,84 @@
         <!-- Start Main Content -->
         <div class="content-page px-3 px-md-0">
             <div class="container">
-                <div class="page-title-head d-flex align-items-center justify-content-start justify-content-md-end">
+                <div class="{% if paths %}page-title-head{% else %}mb-3 mb-lg-5{% endif %} d-flex align-items-center justify-content-start justify-content-md-end">
                     {% include 'core/components/breadcrumb.html' %}
                 </div>
             </div>
+            
             {% block content %}
-            {% if news_first %}
+            {% if news %}
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{% url 'news_detail' news_first.id %}" class="news-card-link">
-                            <div class="card bg-primary border-0 rounded-0 mb-4 mb-lg-5">
-                                <div class="row">
-                                    <div class="col-12 col-lg-4 d-none d-lg-block">
-                                        <div class="card-body d-flex flex-column justify-content-between h-100">
-                                            <div>
-                                                <h4 class="text-white fw-bold text-uppercase">
-                                                    {{ news_first.category.name }}
-                                                </h4>
-                                                <h1 class="text-white fw-bold news-card-title">{{ news_first.title }}</h1>
-                                            </div>
-                                            <div class="d-none d-lg-block">
-                                                <img src="{% static 'images/logotip.png' %}" height="100" alt="FC Dinamo">
+
+                        <div id="mainNewsCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+
+                                {% for item in news %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <a href="{% url 'news_detail' item.id %}" class="news-card-link">
+                                        <div class="card bg-primary border-0 rounded-0 mb-4 mb-lg-5">
+                                            <div class="row g-0">
+
+                                                <!-- TEXT (DESKTOP) -->
+                                                <div class="col-lg-4 d-none d-lg-block">
+                                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                                        <div>
+                                                            <h4 class="text-white fw-bold text-uppercase mb-2">
+                                                                {{ item.category.name }}
+                                                            </h4>
+                                                            <h1 class="text-white fw-bold news-card-title mb-0">
+                                                                {{ item.title }}
+                                                            </h1>
+                                                        </div>
+                                                        <div class="d-none d-lg-block">
+                                                            <img src="{% static 'images/logotip.png' %}" height="100" alt="FC Dinamo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-lg-8 position-relative">
+
+                                                    <img src="{{ item.image.url }}" class="w-100 h-100 object-cover rounded-0" alt="{{ item.title }}">
+
+                                                    <!-- CONTROLS (IMAGE USTIDA) -->
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#mainNewsCarousel" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon"></span>
+                                                    </button>
+
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#mainNewsCarousel" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon"></span>
+                                                    </button>
+
+                                                </div>
+
+
+                                                <!-- TEXT (MOBILE) -->
+                                                <div class="col-12 d-lg-none">
+                                                    <div class="card-body">
+                                                        <h5 class="text-white fw-bold text-uppercase mb-1">
+                                                            {{ item.category.name }}
+                                                        </h5>
+                                                        <h3 class="text-white fw-bold news-card-title mb-0">
+                                                            {{ item.title }}
+                                                        </h3>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-lg-8">
-                                        <img src="{{ news_first.image.url }}" class="w-100 h-100 object-cover rounded-0" alt="Next Match">
-                                    </div>
-                                    <div class="col-12 col-lg-4 d-block d-lg-none">
-                                        <div class="card-body">
-                                            <h4 class="text-white fw-bold text-uppercase">
-                                                {{ news_first.category.name }}
-                                            </h4>
-                                            <h1 class="text-white fw-bold news-card-title">{{ news_first.title }}</h1>
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
+                                {% endfor %}
+
                             </div>
-                        </a>
+
+                        </div>
+
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-12 col-xl-8">
                         <div class="row">
@@ -168,53 +205,26 @@
             </div>
             {% endif %}
             {% endblock content %}
-            {% if sponsors %}
-            <div class="bg-primary-subtle my-4">
-                {% include 'core/components/sponsors.html' %}
-            </div>
-            {% endif %}
+
+            {% include 'core/components/sponsors.html' %}
+            <!-- End of Sponsors -->
             {% include 'core/components/footer.html' %}
+            <!-- End of Footer -->
         </div>
         <!-- End of Main Content -->
-        
     </div>
     <!-- Vendor js -->
     <script src="{% static 'js/vendors.min.js' %}"></script>
     <!-- App js -->
     <script src="{% static 'js/app.js' %}"></script>
+    {% block js %}
     <!-- Plyr Plugin Js-->
     <script src="{% static 'plugins/plyr/plyr.min.js' %}"></script>
-
     <!-- Plyr Page Js-->
     <script src="{% static 'js/pages/plugins-plyr.js' %}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             Plyr.setup(".plyr");
-        });
-    </script>
-    {% block js %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const contents = document.querySelectorAll(".content");
-
-            contents.forEach((content) => {
-                const iframes = content.querySelectorAll("iframe");
-
-                iframes.forEach((iframe) => {
-                    if (!iframe.closest(".ratio")) {
-                        const wrapper = document.createElement("div");
-                        wrapper.className = "ratio ratio-16x9 overflow-hidden";
-
-                        iframe.parentNode.insertBefore(wrapper, iframe);
-                        wrapper.appendChild(iframe);
-
-                        iframe.removeAttribute("width");
-                        iframe.removeAttribute("height");
-                        iframe.style.width = "100%";
-                        iframe.style.height = "100%";
-                    }
-                });
-            });
         });
     </script>
     {% endblock js %}

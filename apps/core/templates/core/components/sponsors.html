@@ -1,13 +1,16 @@
-
-<div class="container my-4">
-    <h2 class="fw-bold text-center py-3 text-dark">Bizning homiylarimiz</h2>
-    <div class="row justify-content-center">
-        {% for item in sponsors %}
-        <div class="col-3 col-md-2 mb-2">
-            <a href="{{ item.link }}" target="_blank">
-                <img src="{{ item.logo.url }}" alt="{{ item.name }}" class="img-fluid w-100 sponsor-item">
-            </a>
+{% if sponsors %}
+<div class="bg-primary-subtle my-4">
+    <div class="container my-4">
+        <h2 class="fw-bold text-center py-3 text-dark">Bizning homiylarimiz</h2>
+        <div class="row justify-content-center">
+            {% for item in sponsors %}
+            <div class="col-3 col-md-2 mb-2">
+                <a href="{{ item.link }}" target="_blank">
+                    <img src="{{ item.logo.url }}" alt="{{ item.name }}" class="img-fluid w-100 sponsor-item">
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
+{% endif %}
