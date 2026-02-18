@@ -1961,13 +1961,13 @@ def judge_sponsors_add(request):
             messages.error(request, "Majburiy maydonlar to'ldirilmagan")
             return redirect('judge_sponsors')
         
-        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/svg"]
-        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp", "svg+xml", "svg"]
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+        ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
         ext = logo.name.rsplit('.', 1)[-1].lower()
 
         if logo.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-            messages.error(request, "Faqat JPG, JPEG, PNG, WEBP yoki SVG rasm yuklash mumkin")
+            messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_sponsors')
 
         Sponsor.objects.create(name=name, link=link, logo=crop_to_2_1(logo))
@@ -1999,13 +1999,13 @@ def judge_sponsors_edit(request, id):
             if sponsor.logo:
                 sponsor.logo.delete(save=False)
 
-            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/svg"]
-            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp", "svg+xml", "svg"]
+            ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+            ALLOWED_EXTS = ["jpg", "jpeg", "png", "webp"]
 
             ext = logo.name.rsplit('.', 1)[-1].lower()
 
             if logo.content_type not in ALLOWED_TYPES or ext not in ALLOWED_EXTS:
-                messages.error(request, "Faqat JPG, JPEG, PNG, WEBP yoki SVG rasm yuklash mumkin")
+                messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
                 return redirect('judge_sponsors', id=sponsor.id)
             sponsor.logo = crop_to_2_1(logo)
 
