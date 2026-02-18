@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 
 def crop_to_16_9(image_file, quality=90):
     img = Image.open(image_file)
-    original_format = img.format  # PNG yoki JPEG
+    original_format = img.format  # PNG, JPEG, WEBP, etc
 
     width, height = img.size
     target_ratio = 16 / 9
@@ -27,12 +27,11 @@ def crop_to_16_9(image_file, quality=90):
     buffer = BytesIO()
 
     if original_format == "PNG":
-        # PNG — shaffoflikni saqlaymiz
         img.save(buffer, format="PNG", optimize=True)
         extension = "png"
-    else:
-        # JPEG — RGBA bo‘lsa RGB ga o‘tkazamiz
-        if img.mode == "RGBA":
+
+    elif original_format in ("JPG", "JPEG"):
+        if img.mode in ("RGBA", "P"):
             img = img.convert("RGB")
 
         img.save(
@@ -42,6 +41,22 @@ def crop_to_16_9(image_file, quality=90):
             optimize=True,
             progressive=True
         )
+        extension = "jpg"
+
+    elif original_format == "WEBP":
+        img.save(
+            buffer,
+            format="WEBP",
+            quality=quality,
+            method=6
+        )
+        extension = "webp"
+
+    else:
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        img.save(buffer, format="JPEG", quality=quality)
         extension = "jpg"
 
     return ContentFile(
@@ -49,32 +64,32 @@ def crop_to_16_9(image_file, quality=90):
         name=f"news_16x9.{extension}"
     )
 
+
 def crop_to_1_1(image_file, quality=90):
     img = Image.open(image_file)
-    original_format = img.format  # PNG yoki JPEG
+    original_format = img.format  # PNG, JPEG, WEBP, etc
 
     width, height = img.size
-    target_ratio = 1 / 1
+    target_ratio = 1
     current_ratio = width / height
 
     if current_ratio > target_ratio:
-        new_width = int(height * target_ratio)
+        new_width = height
         left = (width - new_width) // 2
         img = img.crop((left, 0, left + new_width, height))
     else:
-        new_height = int(width / target_ratio)
+        new_height = width
         top = (height - new_height) // 2
         img = img.crop((0, top, width, top + new_height))
 
     buffer = BytesIO()
 
     if original_format == "PNG":
-        # PNG — shaffoflikni saqlaymiz
         img.save(buffer, format="PNG", optimize=True)
         extension = "png"
-    else:
-        # JPEG — RGBA bo‘lsa RGB ga o‘tkazamiz
-        if img.mode == "RGBA":
+
+    elif original_format in ("JPG", "JPEG"):
+        if img.mode in ("RGBA", "P"):
             img = img.convert("RGB")
 
         img.save(
@@ -86,10 +101,27 @@ def crop_to_1_1(image_file, quality=90):
         )
         extension = "jpg"
 
+    elif original_format == "WEBP":
+        img.save(
+            buffer,
+            format="WEBP",
+            quality=quality,
+            method=6
+        )
+        extension = "webp"
+
+    else:
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        img.save(buffer, format="JPEG", quality=quality)
+        extension = "jpg"
+
     return ContentFile(
         buffer.getvalue(),
         name=f"player_1x1.{extension}"
     )
+
 
 def crop_to_2_1(image_file, quality=90):
     img = Image.open(image_file)

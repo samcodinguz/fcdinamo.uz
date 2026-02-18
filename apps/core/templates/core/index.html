@@ -115,7 +115,7 @@
                                             <div class="col-8 col-md-12">
                                                 <div class="card-body px-0 px-md-2">
                                                     <h5 class="text-uppercase d-none d-md-block">{{ news.category.name }}</h5>
-                                                    <h4 class="text-dark news-card-title d-none d-md-block">{{ news.title }}</h4>
+                                                    <h4 class="text-dark news-card-title d-none d-md-block">{{ news.title|truncatewords:6 }}</h4>
                                                     <h5 class="text-dark news-card-title d-md-none">{{ news.title|truncatewords:7 }}</h5>
                                                 </div>
                                             </div>
@@ -150,7 +150,7 @@
                     <div class="col-12 col-md-4">
                         <div class="card rounded-0">
                             <div class="card-body content p-0">
-                                <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #f8ac59"></div>
+                                <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #236dc9"></div>
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <h3 class="card-title">{{ video.title }}</h3>

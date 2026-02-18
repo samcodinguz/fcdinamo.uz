@@ -9,12 +9,11 @@
         <div class="col-xl-4 col-md-6">
             <div class="card rounded-0">
                 <div class="card-body content p-0">
-                    <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #f8ac59"></div>
+                    <div class="plyr w-100" data-plyr-provider="youtube" data-plyr-embed-id="{{ video.link }}" style="--plyr-color-main: #236dc9"></div>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <div>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ video.title }}" data-bs-original-title="Video sarlavhasi">Sarlavha</button>
-                    </div>
+                    <button type="button" class="btn btn-primary btn-sm d-none d-md-inline" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ video.title }}" data-bs-original-title="Video sarlavhasi">Sarlavha</button>
+                    <h3 class="card-title d-md-none">{{ video.title }}</h3>
                 </div>
             </div>
         </div>
