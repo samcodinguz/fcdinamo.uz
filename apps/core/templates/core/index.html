@@ -50,7 +50,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-
+                        <div class="text-center w-md-75 w-xl-50 mx-auto py-3 d-lg-none">
+                            <form action="{% url 'search' %}" method="get" class="app-search app-search-pill input-group mb-3 rounded-pill">
+                                <input type="text" class="form-control py-2 fw-semibold" name="search" value="{{ query }}" placeholder="Saytdan qidirish..." />
+                                <i class="ti ti-search app-search-icon text-muted"></i>
+                                <button class="btn btn-outline-primary" type="submit">Izlash</button>
+                            </form>
+                        </div>
                         <div id="mainNewsCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                             <div class="carousel-inner">
 

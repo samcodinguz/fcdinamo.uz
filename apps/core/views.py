@@ -9,6 +9,7 @@ from apps.leagues.models import Season, TeamType
 from .models import Contact, Message, Video
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
 
 def index(request):
 
@@ -99,6 +100,40 @@ def contacts(request):
     context.update(utils.get_base_context(request))
 
     return render(request, 'core/contacts/contact.html', context)
+
+
+    
+def search(request):
+
+    query = request.GET.get('search', '').strip()
+
+    if query:
+        news = News.objects.filter(
+            is_published=True,
+            title__icontains=query
+        ).select_related('category', 'author').order_by('-created_at')
+    else:
+        news = News.objects.none()
+    
+    cnt = news.count()
+    news, pagination_range = utils.paginate_queryset(news, request, per_page=10)
+
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'search', 'url': 'search', 'args': []},
+    ]
+
+    context = {
+        'result_news': news,
+        'pagination_range': pagination_range,
+        'query': query,
+        'page_title': f'Qidiruv: {query}',
+        'cnt': cnt,
+        'paths': paths
+    }
+    context.update(utils.get_base_context(request))
+    return render(request, 'core/search/search.html', context)
+
 
 def sign_in(request):
      
