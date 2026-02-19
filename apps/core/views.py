@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from apps.users.models import CustomUser
 from django.contrib import messages
-from apps.news.models import News
+from apps.news.models import News, NewsTag
 from . import utils
 from apps.matches.utils import get_matches
 from apps.leagues.models import Season, TeamType
-from .models import Contact, Message, Video
+from .models import Contact, Message, Video, ClubSocial
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
+from apps.judge.utils import crop_to_1_1
 
 def index(request):
 
@@ -133,6 +134,82 @@ def search(request):
     }
     context.update(utils.get_base_context(request))
     return render(request, 'core/search/search.html', context)
+
+
+
+
+def profile(request, username):
+
+    if not request.user.is_authenticated:
+        return redirect('home')
+    
+    if request.user.username != username and not request.user.is_superuser:
+        return redirect('home')
+    
+    user = get_object_or_404(CustomUser, username=username)
+    
+    if request.method == 'POST':
+
+        firstname = request.POST.get('first_name', '').strip()
+        lastname = request.POST.get('last_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip()
+        bio = request.POST.get('bio', '').strip()
+        password = request.POST.get('password', '').strip()
+
+        if firstname:
+            user.first_name = firstname
+        if lastname:
+            user.last_name = lastname
+        if phone:
+            user.phone = phone
+        if email:
+            user.email = email
+        if bio:
+            user.bio = bio
+        
+        if password:
+            if utils.is_strong_password(password):
+                user.set_password(password)
+                update_session_auth_hash(request, user)
+            else:
+                messages.error(request, "Yangi parol murakkab emas")
+                return redirect('profile', username=username)
+            
+        if request.FILES.get('avatar'):
+            if user.avatar:
+                user.avatar.delete(save=False)
+
+            avatar = crop_to_1_1(request.FILES['avatar'])
+            
+            if not avatar:
+                messages.error(request, "Iltimos, rasmni to'g'ri formatda yuklang (jpg, png, jpeg, webp)!")
+                return redirect('profile', username=username)
+
+            user.avatar = avatar
+
+        user.save()
+        messages.success(request, "Profil muvaffaqiyatli yangilandi")
+        return redirect('profile', username=username)
+    
+    tags = NewsTag.objects.order_by('?')[:10]
+    social = ClubSocial.objects.first()
+    
+    
+    paths = [
+        {'title': 'home', 'url': 'home', 'args': []},
+        {'title': 'profile', 'url': 'profile', 'args': []},
+    ]
+
+    context = {
+        'tags': tags,
+        'social': social,
+        'user': user,
+        'page_title': f"Foydalanuvchi: {user.username}",
+        'paths': paths
+    }
+    context.update(utils.get_base_context(request))
+    return render(request, 'core/user/profile.html', context)
 
 
 def sign_in(request):

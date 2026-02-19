@@ -10,4 +10,5 @@ urlpatterns = [
     path('video', views.galery_video, name='galery_video'),
     path('photo', views.galery_photo, name='galery_photo'),
     path('search', views.search, name='search'),
+    path('profile/<str:username>', views.profile, name='profile'),
 ]

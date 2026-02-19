@@ -17,13 +17,13 @@
         <div class="dropdown-menu dropdown-menu-end">
 
             <!-- My Profile -->
-            <a href="#" class="dropdown-item">
+            <a href="{% url 'profile' request.user.username %}" class="dropdown-item">
                 <i class="ti ti-user-circle me-1 fs-lg align-middle"></i>
                 <span class="align-middle">Profil</span>
             </a>
 
             <!-- Settings -->
-            <a href="#" class="dropdown-item">
+            <a href="{% url 'profile' request.user.username %}" class="dropdown-item">
                 <i class="ti ti-settings-2 me-1 fs-lg align-middle"></i>
                 <span class="align-middle">Sozlamalar</span>
             </a>

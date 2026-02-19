@@ -85,3 +85,11 @@
         font-size: 16px;
     }
 }
+
+.user-card-bg {
+    background-image: url('../images/stadium.webp');
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}

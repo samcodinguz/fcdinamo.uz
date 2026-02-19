@@ -1,0 +1,269 @@
+{% extends "core/index.html" %} {% load static %} {% block title %}FC Dinamo - {{ page_title }}{% endblock title %} {% block css %} {% endblock css %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <article class="card overflow-hidden mb-0">
+                <div class="user-card-bg position-relative card-side-img overflow-hidden" style="min-height: 200px;">
+                    <div class="p-4 card-img-overlay rounded-start-0 auth-overlay d-flex align-items-center flex-column justify-content-center">
+                        <h3 class="text-white mb-1 fst-italic">"Crafting innovation through clean design"</h3>
+                        <p class="text-white mb-4">– MyStatus</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- end col-->
+    </div>
+    <!-- end row-->
+
+    <div class="px-3 mt-n4">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card card-top-sticky">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="me-3 position-relative">
+                                {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" alt="avatar" class="rounded-circle" width="72" height="72" />
+                                {% else %}
+                                <img src="{% static 'images/user.jpg' %}" alt="avatar" class="rounded-circle" width="72" height="72" />
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h5 class="mb-0 d-flex align-items-center">
+                                    <a href="{% url 'profile' user.username %}" class="link-reset">{% if user.first_name or user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</a>
+                                </h5>
+                                <p class="text-muted mb-2">Muxil sifatida</p>
+                                <span class="badge text-bg-success badge-label">Hozir saytda</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            
+                            
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="avatar-sm text-bg-light bg-opacity-75 d-flex align-items-center justify-content-center rounded-circle">
+                                    <i class="ti ti-user fs-xl"></i>
+                                </div>
+                                <p class="mb-0 fs-sm">
+                                    Username
+                                    <span class="text-dark fw-semibold">@{{ user.username }}</span>
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="avatar-sm text-bg-light bg-opacity-75 d-flex align-items-center justify-content-center rounded-circle">
+                                    <i class="ti ti-mail fs-xl"></i>
+                                </div>
+                                <p class="mb-0 fs-sm">
+                                    Email
+                                    <a href="mailto:{{ user.email }}" class="text-primary fw-semibold">{{ user.email }}</a>
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="avatar-sm text-bg-light bg-opacity-75 d-flex align-items-center justify-content-center rounded-circle">
+                                    <i class="ti ti-link fs-xl"></i>
+                                </div>
+                                <p class="mb-0 fs-sm">
+                                    Sayt
+                                    <a href="https://fcdinamo.uz" class="text-primary fw-semibold">fcdinamo.uz</a>
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="avatar-sm text-bg-light bg-opacity-75 d-flex align-items-center justify-content-center rounded-circle">
+                                    <i class="ti ti-world fs-xl"></i>
+                                </div>
+                                <p class="mb-0 fs-sm">
+                                    Til
+                                    <span class="text-dark fw-semibold">O'zbek</span>
+                                </p>
+                            </div>
+
+                            <div class="d-flex justify-content-center gap-2 mt-4 mb-2">
+                                {% if social.youtube %}
+                                <a href="{{ social.youtube }}" class="btn btn-icon rounded-circle btn-danger" title="YouTube">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-brand-youtube"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M2 8a4 4 0 0 1 4 -4h12a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-12a4 4 0 0 1 -4 -4v-8z" />
+                                        <path d="M10 9l5 3l-5 3z" />
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                {% if social.facebook %}
+                                <a href="{{ social.facebook }}" class="btn btn-icon rounded-circle btn-primary" title="Facebook">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-brand-facebook"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                {% if social.telegram %}
+                                <a href="{{ social.telegram }}" class="btn btn-icon rounded-circle btn-info" title="Telegram">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" /></svg>
+                                </a>
+                                {% endif %}
+                                {% if social.instagram %}
+                                <a href="{{ social.instagram }}" class="btn btn-icon rounded-circle btn-danger" title="Instagram">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+                                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                        <path d="M16.5 7.5v.01" />
+                                    </svg>
+                                </a>
+                                {% endif %}
+                                {% if social.twitter %}
+                                <a href="{{ social.twitter }}" class="btn btn-icon rounded-circle btn-secondary" title="Twitter">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4l11.733 16h4.267l-11.733 -16l-4.267 0" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!---->
+                        <h4 class="card-title mb-3 mt-4">Kalit so'zlar</h4>
+
+                        <div class="d-flex flex-wrap gap-1">
+                            
+                            {% for tag in tags %}
+                                <a class="btn btn-light btn-sm" href="{% url 'news_all' %}?tag={{ tag.name }}">#{{ tag.name }}</a>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <!-- end card-body-->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col-->
+
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-header card-tabs d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Mening hisobim</h4>
+                        </div>
+                        <ul class="nav nav-tabs card-header-tabs nav-bordered">
+                            
+                            <li class="nav-item">
+                                <a href="#settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                    <i class="ti ti-settings d-md-none d-block fs-lg"></i>
+                                    <span class="d-none d-md-block fw-bold">Sozlamalar</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+
+                            <div class="tab-pane show active" id="settings">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <!-- Personal Info -->
+                                    <h5 class="mb-3 text-uppercase bg-light-subtle p-1 border-dashed border rounded border-light d-flex justify-content-center align-items-center gap-1">
+                                        <i class="ti ti-user-circle fs-lg"></i>
+                                        Shaxsiy ma'lumotlar
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="firstname" class="form-label">Ism</label>
+                                                <input type="text" class="form-control" id="firstname" name="first_name" placeholder="Ismingizni kiriting" value="{{ user.first_name|default:'' }}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lastname" class="form-label">Familiya</label>
+                                                <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Familiyangizni kiriting" value="{{ user.last_name|default:'' }}" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Telefon raqami</label>
+                                                <input type="text" class="form-control" id="phone" name="phone" placeholder="+998 90 123 45 67" value="{{ user.phone|default:'' }}" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="userbio" class="form-label">Bio</label>
+                                        <textarea class="form-control" id="userbio" name="bio" rows="4" placeholder="O'zingiz haqingizda yozing...">{{ user.bio|default:'' }}</textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="useremail" class="form-label">Email manzili</label>
+                                                <input type="email" class="form-control" id="useremail" name="email" placeholder="Email manzilingizni kiriting" value="{{ user.email|default:'' }}" />
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="userpassword" class="form-label">Parol</label>
+                                                <input type="password" class="form-control" id="userpassword" name="password" placeholder="Yangi parolni kiriting" />
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="avatar" class="form-label">Profil rasmi</label>
+                                        <input class="form-control" type="file" id="avatar" name="avatar"/>
+                                    </div>
+
+                                    <!-- Submit -->
+                                    <div class="text-end mt-4">
+                                        <button type="submit" class="btn btn-success">O'zgarishlarni saqlash</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end settings Data-->
+                        </div>
+                        <!-- end tab content-->
+                    </div>
+                    <!-- end card-body -->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+</div>
+{% endblock content %} {% block js %} {% endblock js %}
