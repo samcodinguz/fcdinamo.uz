@@ -459,10 +459,10 @@ def judge_news_tags(request):
         messages.success(request, f"{len(ids)} ta teg o'chirildi")
         return redirect('judge_news_tags')
 
-    per_page = request.GET.get('per_page', 10)
+    per_page = request.GET.get('per_page', 20)
 
     tags_list = NewsTag.objects.all().order_by('-id')
-    tags_list, pagination_range = paginate_queryset(tags_list, request, per_page=per_page)
+    tags_list, pagination_range = paginate_queryset(tags_list, request, per_page=20)
 
     paths = [
         {'title': 'judge', 'url': 'judge', 'args': []},
