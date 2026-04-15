@@ -1926,7 +1926,7 @@ def judge_sponsors(request):
         return redirect('judge_sponsors')
     
     per_page = request.GET.get('per_page', 10)
-    clubs_list = Sponsor.objects.all().order_by('-id')
+    clubs_list = Sponsor.objects.all().order_by('order', '-id')
 
     clubs_list, pagination_range = paginate_queryset(clubs_list, request, per_page=per_page)
     
@@ -1955,6 +1955,7 @@ def judge_sponsors_add(request):
 
         name = request.POST.get('name')
         link = request.POST.get('link')
+        order = request.POST.get('order')
         logo = request.FILES.get('logo')
         
         if not name or not logo:
@@ -1970,7 +1971,7 @@ def judge_sponsors_add(request):
             messages.error(request, "Faqat JPG, JPEG, PNG yoki WEBP rasm yuklash mumkin")
             return redirect('judge_sponsors')
 
-        Sponsor.objects.create(name=name, link=link, logo=crop_to_2_1(logo))
+        Sponsor.objects.create(name=name, link=link, order=order, logo=crop_to_2_1(logo))
         messages.success(request, "Homiy muvaffaqiyatli yaratildi")
     
     return redirect('judge_sponsors')
@@ -1986,6 +1987,7 @@ def judge_sponsors_edit(request, id):
     if request.method == "POST":
         name = request.POST.get("name")
         link = request.POST.get("link")
+        order = request.POST.get("order")
         logo = request.FILES.get("logo")
 
         if not name or not link:
@@ -1994,6 +1996,7 @@ def judge_sponsors_edit(request, id):
         
         sponsor.name = name
         sponsor.link = link
+        sponsor.order = order
 
         if 'logo' in request.FILES:
             if sponsor.logo:

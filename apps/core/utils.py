@@ -24,7 +24,7 @@ def get_base_context(request):
     return {
         'current_year': datetime.now().year,
         'categorys': TeamType.objects.all().order_by('order'),
-        'sponsors': Sponsor.objects.all().order_by('-id')
+        'sponsors': Sponsor.objects.all().order_by('order', '-id')
     }
 
 def get_pagination_range(current_page, total_pages, delta=1):
